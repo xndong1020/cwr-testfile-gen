@@ -18,10 +18,11 @@ import HdrForm from "./forms/HdrForm";
 import DndContainer from "./components/DndContainer";
 import DndTag from "./components/DndTag";
 import { CreateTagContext } from "./contexts/TagContext";
+import IndForm from "./forms/IndForm";
 
 function App() {
-  const { nwr, hdr, grh, grt } = useContext(CreateFormContext);
-  const { isNwrActive } = useContext(CreateTagContext);
+  const { nwr, hdr, grh, grt, ind } = useContext(CreateFormContext);
+  const { isNwrActive, isIndActive } = useContext(CreateTagContext);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const grhString = Object.values(grh).reduce((accu, cur) => {
@@ -40,6 +41,10 @@ function App() {
       accu += cur;
       return accu;
     }, "");
+    const indString = Object.values(ind).reduce((accu, cur) => {
+      accu += cur;
+      return accu;
+    }, "");
     var element = document.createElement("a");
     element.setAttribute(
       "href",
@@ -49,6 +54,8 @@ function App() {
         grhString +
         "\n" +
         nwrString +
+        "\n" +
+        indString +
         "\n" +
         grtString
     );
@@ -67,7 +74,7 @@ function App() {
         <Grid item xs={9}>
           <Paper>
             <form onSubmit={submitHandler}>
-              {true && (
+              {false && (
                 <Box>
                   <Accordion>
                     <AccordionSummary
@@ -96,6 +103,21 @@ function App() {
                   </AccordionSummary>
                   <AccordionDetails>
                     <NwrForm transactionSeq={0} recordSeq={1} />
+                  </AccordionDetails>
+                </Accordion>
+              )}
+
+              {isIndActive && (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Add IND Record</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <IndForm />
                   </AccordionDetails>
                 </Accordion>
               )}

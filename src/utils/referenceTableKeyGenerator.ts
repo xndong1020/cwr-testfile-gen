@@ -1,6 +1,7 @@
 import { compositeType } from "../referenceTables/compositeType";
 import { cwrWorkType } from "../referenceTables/cwrWorkType";
 import { excerptType } from "../referenceTables/excerptType";
+import { instruments } from "../referenceTables/instrument";
 import { languageCodeTable } from "../referenceTables/language";
 import { lyricAdaptation } from "../referenceTables/lyricAdaptation";
 import { musicalWorkDistributionCategory } from "../referenceTables/musicalWorkDistributionCategory";
@@ -52,6 +53,11 @@ export const lyricAdaptationKenGen = (): string => {
 export const cwrWorkTypeKenGen = (): string => {
   return tableKeyGen(cwrWorkType);
 };
+
+export const instrumentsKenGen = (): string => {
+  return tableKeyGen(instruments);
+};
+
 
 export const booleanValueGen = (): string => {
   return tableKeyGen({ Y: "Y", N: "N" });

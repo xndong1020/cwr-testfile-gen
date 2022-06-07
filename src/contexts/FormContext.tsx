@@ -2,6 +2,7 @@ import React, { createContext, memo, useState } from "react";
 import { IGrhForm } from "../forms/GrhForm";
 import { IGrtForm } from "../forms/GrtForm";
 import { IHdrForm } from "../forms/HdrForm";
+import { IIndForm } from "../forms/IndForm";
 import { INwrForm } from "../forms/NwrForm";
 
 export interface IFormContext {
@@ -9,10 +10,12 @@ export interface IFormContext {
   grt: IGrtForm;
   hdr: IHdrForm;
   nwr: INwrForm;
+  ind: IIndForm;
   handleUpdateGrhForm: (grh: IGrhForm) => void;
   handleUpdateGrtForm: (grt: IGrtForm) => void;
   handleUpdateHdrForm: (hdr: IHdrForm) => void;
   handleUpdateNrwForm: (nwr: INwrForm) => void;
+  handleUpdateIndForm: (nwr: IIndForm) => void;
 }
 
 export const initFormContextValues: IFormContext = {
@@ -73,10 +76,16 @@ export const initFormContextValues: IFormContext = {
     "catalogue-number": "",
     "priority-flag": "",
   },
+  ind: {
+    "record-prefix": "IND",
+    "instrument-code": "",
+    "numbers-of-players": "",
+  },
   handleUpdateGrhForm: (grh: IGrhForm) => {},
   handleUpdateGrtForm: (grt: IGrtForm) => {},
   handleUpdateHdrForm: (hdr: IHdrForm) => {},
   handleUpdateNrwForm: (nwr: INwrForm) => {},
+  handleUpdateIndForm: (nwr: IIndForm) => {},
 };
 
 export const CreateFormContext = createContext<IFormContext>(
@@ -109,15 +118,23 @@ export const CreateFormContextProvider = memo(
         nwr,
       }));
     };
+    const handleUpdateIndForm = (ind: IIndForm) => {
+      setState((prevState: IFormContext) => ({
+        ...prevState,
+        ind,
+      }));
+    };
     const [state, setState] = useState({
       grh: {},
       grt: {},
       hdr: {},
       nwr: {},
+      ind: {},
       handleUpdateGrhForm,
       handleUpdateGrtForm,
       handleUpdateNrwForm,
       handleUpdateHdrForm,
+      handleUpdateIndForm,
     } as IFormContext);
 
     return (

@@ -1,4 +1,4 @@
-export const Instruments = {
+export const instruments = {
   ACC: "Accordion",
   ALP: "Alp Horn",
   ACL: "Alto Clarinet",
