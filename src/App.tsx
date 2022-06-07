@@ -5,6 +5,8 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
+  Box,
+  Grid,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NwrForm from "./forms/NwrForm";
@@ -13,9 +15,13 @@ import React, { useContext } from "react";
 import GrtForm from "./forms/GrtForm";
 import GrhForm from "./forms/GrhForm";
 import HdrForm from "./forms/HdrForm";
+import DndContainer from "./components/DndContainer";
+import DndTag from "./components/DndTag";
+import { CreateTagContext } from "./contexts/TagContext";
 
 function App() {
   const { nwr, hdr, grh, grt } = useContext(CreateFormContext);
+  const { isNwrActive } = useContext(CreateTagContext);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const grhString = Object.values(grh).reduce((accu, cur) => {
@@ -57,40 +63,58 @@ function App() {
   };
   return (
     <>
-      <Paper>
-        <form onSubmit={submitHandler}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Add Transmission Header</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <HdrForm />
-            </AccordionDetails>
-          </Accordion>
-          <GrhForm groupId={1} batchRequest={1} />
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Add NWR/REV Record</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <NwrForm transactionSeq={0} recordSeq={1} />
-            </AccordionDetails>
-          </Accordion>
-          <GrtForm groupId={1} transactionCount={1} recordCount={1} />
-          <br />
-          <Button type="submit" variant="contained" color="primary">
-            save
-          </Button>
-        </form>
-      </Paper>
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <Paper>
+            <form onSubmit={submitHandler}>
+              {true && (
+                <Box>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography>Add Transmission Header</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <HdrForm />
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              )}
+              <GrhForm groupId={1} batchRequest={1} />
+              <DndContainer allowedDropEffect="copy" />
+              {isNwrActive && (
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Add NWR/REV Record</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <NwrForm transactionSeq={0} recordSeq={1} />
+                  </AccordionDetails>
+                </Accordion>
+              )}
+              <GrtForm groupId={1} transactionCount={1} recordCount={1} />
+              <br />
+              <Button type="submit" variant="contained" color="primary">
+                save
+              </Button>
+            </form>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper>
+            <Box sx={{ border: "1px dashed #888", height: 400 }}>
+              <DndTag name="IND" />
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
     </>
   );
 }

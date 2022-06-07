@@ -4,14 +4,21 @@ import App from "./App";
 import { ThemeProvider } from "@emotion/react";
 import theme from "./theme";
 import { CreateFormContextProvider } from "./contexts/FormContext";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { CreateTagContextProvider } from "./contexts/TagContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <ThemeProvider theme={theme}>
-    <CreateFormContextProvider>
-      <App />
-    </CreateFormContextProvider>
+    <DndProvider backend={HTML5Backend}>
+      <CreateTagContextProvider>
+        <CreateFormContextProvider>
+          <App />
+        </CreateFormContextProvider>
+      </CreateTagContextProvider>
+    </DndProvider>
   </ThemeProvider>
 );
