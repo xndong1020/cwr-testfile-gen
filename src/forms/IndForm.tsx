@@ -26,7 +26,7 @@ export const initIndForm = {
 const IndForm = () => {
   const [indForm, setForm] = useState<IIndForm>(initIndForm);
   const { handleUpdateIndForm } = useContext(CreateFormContext);
-  
+
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { id, value } = e.target;
@@ -63,11 +63,8 @@ const IndForm = () => {
           inputProps={{ maxLength: IndFormConfig["record-prefix"].length }}
         />
         <FormHelperText id="record-prefix-helper-text">
-          Indicates if the sender of the file is a society or a publisher.
-          Values are PB = Publisher, SO = Society, AA = Administrative Agency,
-          WR = Writer. If CWR Sender ID (IPNN) greater than 9 digits (without
-          the 2 leading 0) then use Sender Type field to provide leading numbers
-          of the CWR Sender ID. (Size: {IndFormConfig["record-prefix"].length})
+          Set Record Type = IND (Instrumentation Detail). (Size:{" "}
+          {IndFormConfig["record-prefix"].length})
         </FormHelperText>
       </FormControl>
       <br />
@@ -82,13 +79,9 @@ const IndForm = () => {
           inputProps={{ maxLength: IndFormConfig["instrument-code"].length }}
         />
         <FormHelperText id="instrument-code-helper-text">
-          If Sender Type is equal to PB, AA, or WR, the sender must enter their
-          assigned CWR IPI # in this field. These values reside in the CWR
-          Sender ID and Codes Table. If Sender Type is equal to SO, the sending
-          society must enter their Society Code. These values reside in the
-          Society Code Table. If CWR Sender ID (IPNN) greater than 9 digits then
-          use Sender ID to provide remaining numbers of the CWR Sender ID.
-          (Size: {IndFormConfig["instrument-code"].length})
+          Indicates the use of a specific instrument in this version of
+          instrumentation. These values reside in the Instrument Table. (Size:{" "}
+          {IndFormConfig["instrument-code"].length})
         </FormHelperText>
       </FormControl>
       <br />
@@ -103,7 +96,7 @@ const IndForm = () => {
           inputProps={{ maxLength: IndFormConfig["numbers-of-players"].length }}
         />
         <FormHelperText id="numbers-of-players-helper-text">
-          The name of the sender (publisher, society, agency). (Size:{" "}
+          Indicates the number of players for the above instrument. (Size:{" "}
           {IndFormConfig["numbers-of-players"].length})
         </FormHelperText>
       </FormControl>
