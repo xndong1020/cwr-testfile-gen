@@ -66,7 +66,7 @@ export interface INwrForm {
 }
 
 export const initNwrForm = {
-  "record-type": "NWR",
+  "record-type": "",
   "transaction-sequence-number": "",
   "record-sequence-number": "",
   "work-title": "",
@@ -97,11 +97,12 @@ export const initNwrForm = {
 };
 
 interface NwrFormProps {
+  type: "NWR" | "REV";
   transactionSeq: number;
   recordSeq: number;
 }
 
-const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
+const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
   const [nwrForm, setForm] = useState<INwrForm>(initNwrForm);
   const { handleUpdateNrwForm } = useContext(CreateFormContext);
 
@@ -118,19 +119,20 @@ const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
     []
   );
 
-  const handleRadioButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(" e.target.value", e.target.value);
-    setForm((prev) => {
-      return {
-        ...prev,
-        "record-type": e.target.value,
-      };
-    });
-  };
+  // const handleRadioButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log(" e.target.value", e.target.value);
+  //   setForm((prev) => {
+  //     return {
+  //       ...prev,
+  //       "record-type": e.target.value,
+  //     };
+  //   });
+  // };
 
   const handleGenerateNrw = (requiredFieldsOnly: boolean = false) => {
     const dummyNrw: INwrForm = {
       ...nwrForm,
+      "record-type": `${type}`,
       "transaction-sequence-number": ("" + transactionSeq).padStart(8, "0"),
       "record-sequence-number": ("" + recordSeq).padStart(8, "0"),
       "work-title": wordsGen().toUpperCase(),
@@ -215,7 +217,7 @@ const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
 
   return (
     <>
-      <FormControl>
+      {/* <FormControl>
         <FormLabel id="record-type-label">Record Type</FormLabel>
         <RadioGroup
           row
@@ -228,7 +230,7 @@ const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
           <FormControlLabel value="REV" control={<Radio />} label="REV" />
         </RadioGroup>
       </FormControl>
-      <br />
+      <br /> */}
       <FormControl>
         <InputLabel htmlFor="work-title">Work Title</InputLabel>
         <Input

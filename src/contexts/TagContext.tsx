@@ -1,13 +1,15 @@
 import React, { createContext, memo, useState } from "react";
 
 export interface ITagContext {
-  isNwrActive: boolean;
-  isIndActive: boolean;
+  activeHdrCount: number;
+  activeNwrCount: number;
+  activeIndCount: number;
   handleSetItemActive: (name: string) => void;
 }
 export const initTagContextValues: ITagContext = {
-  isNwrActive: false,
-  isIndActive: false,
+  activeHdrCount: 0,
+  activeNwrCount: 0,
+  activeIndCount: 0,
   handleSetItemActive: (name: string) => {},
 };
 
@@ -18,17 +20,24 @@ export const CreateTagContextProvider = memo(
   ({ children }: { children: any }): JSX.Element => {
     const handleSetItemActive = (name: string) => {
       switch (name) {
+        case "HDR":
+          setState((prevState: ITagContext) => ({
+            ...prevState,
+            activeHdrCount: prevState.activeHdrCount + 1,
+          }));
+          break;
+
         case "NWR":
           setState((prevState: ITagContext) => ({
             ...prevState,
-            isNwrActive: !prevState.isNwrActive,
+            activeNwrCount: prevState.activeNwrCount + 1,
           }));
           break;
 
         case "IND":
           setState((prevState: ITagContext) => ({
             ...prevState,
-            isIndActive: !prevState.isIndActive,
+            activeIndCount: prevState.activeIndCount + 1,
           }));
           break;
 
@@ -37,8 +46,9 @@ export const CreateTagContextProvider = memo(
       }
     };
     const [state, setState] = useState({
-      isNwrActive: false,
-      isIndActive: false,
+      activeHdrCount: 0,
+      activeNwrCount: 0,
+      activeIndCount: 0,
       handleSetItemActive,
     } as ITagContext);
 

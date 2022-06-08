@@ -22,7 +22,8 @@ import IndForm from "./forms/IndForm";
 
 function App() {
   const { nwr, hdr, grh, grt, ind } = useContext(CreateFormContext);
-  const { isNwrActive, isIndActive } = useContext(CreateTagContext);
+  const { activeHdrCount, activeNwrCount, activeIndCount } =
+    useContext(CreateTagContext);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const grhString = Object.values(grh).reduce((accu, cur) => {
@@ -73,8 +74,9 @@ function App() {
       <Grid container spacing={2}>
         <Grid item xs={9}>
           <Paper>
+            <DndContainer allowedDropEffect="copy" />
             <form onSubmit={submitHandler}>
-              {false && (
+              {!!activeHdrCount && (
                 <Box>
                   <Accordion>
                     <AccordionSummary
@@ -91,23 +93,22 @@ function App() {
                 </Box>
               )}
               <GrhForm groupId={1} batchRequest={1} />
-              <DndContainer allowedDropEffect="copy" />
-              {isNwrActive && (
+              {!!activeNwrCount && (
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography>Add NWR/REV Record</Typography>
+                    <Typography>Add NWR Record</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <NwrForm transactionSeq={0} recordSeq={1} />
+                    <NwrForm type={"NWR"} transactionSeq={0} recordSeq={1} />
                   </AccordionDetails>
                 </Accordion>
               )}
 
-              {isIndActive && (
+              {!!activeIndCount && (
                 <Accordion>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -121,7 +122,11 @@ function App() {
                   </AccordionDetails>
                 </Accordion>
               )}
-              <GrtForm groupId={1} transactionCount={1} recordCount={1} />
+              <GrtForm
+                groupId={1}
+                transactionCount={1}
+                recordCount={activeNwrCount + activeIndCount}
+              />
               <br />
               <Button type="submit" variant="contained" color="primary">
                 save
@@ -132,7 +137,9 @@ function App() {
         <Grid item xs={3}>
           <Paper>
             <Box sx={{ border: "1px dashed #888", height: 400 }}>
+              <DndTag name="HDR" />
               <DndTag name="IND" />
+              <DndTag name="NWR" />
             </Box>
           </Paper>
         </Grid>
