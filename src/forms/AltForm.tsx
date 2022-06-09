@@ -6,26 +6,28 @@ import {
   Button,
 } from "@mui/material";
 import React, { useState, useCallback, useContext } from "react";
-import { IndFormConfig } from "../configurations/IndFormConfig";
+import { AltFormConfig } from "../configurations/AltFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
-import { numericOnlyGen } from "../utils/dummyDataGenerators";
-import { instrumentsKenGen } from "../utils/referenceTableKeyGenerator";
+import { numericOnlyGen, wordsGen } from "../utils/dummyDataGenerators";
+import { languageKeyGen, titleTypesKenGen } from "../utils/referenceTableKeyGenerator";
 
 export interface IAltForm {
   "record-prefix": string;
-  "instrument-code": string;
-  "numbers-of-players": string;
+  "alternate-title": string;
+  "title-type": string;
+  "language-code": string;
 }
 
 export const initAltForm = {
   "record-prefix": "ALT",
-  "instrument-code": "",
-  "numbers-of-players": "",
+  "alternate-title": "",
+  "title-type": "",
+  "language-code": "",
 };
 
 const IndForm = () => {
   const [altForm, setForm] = useState<IAltForm>(initAltForm);
-  const { handleUpdateIndForm } = useContext(CreateFormContext);
+  const { handleUpdateAltForm } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,16 +42,15 @@ const IndForm = () => {
     []
   );
   const handleGenerateInd = () => {
-    const newIndForm = {
+    const newAltForm = {
       "record-prefix":
-        "ALT" + numericOnlyGen(IndFormConfig["record-prefix"].length - 3),
-      "instrument-code": instrumentsKenGen(),
-      "numbers-of-players": numericOnlyGen(
-        IndFormConfig["numbers-of-players"].length
-      ),
+        "ALT" + numericOnlyGen(AltFormConfig["record-prefix"].length - 3),
+      "alternate-title": wordsGen().toUpperCase(),
+      "title-type": titleTypesKenGen(),
+      "language-code": languageKeyGen(),
     };
-    setForm(newIndForm);
-    handleUpdateIndForm(newIndForm);
+    setForm(newAltForm);
+    handleUpdateAltForm(newAltForm);
   };
   return (
     <>
@@ -60,44 +61,63 @@ const IndForm = () => {
           aria-describedby="record-prefix-helper-text"
           value={altForm["record-prefix"]}
           onChange={handleInputChange}
-          inputProps={{ maxLength: IndFormConfig["record-prefix"].length }}
+          inputProps={{ maxLength: AltFormConfig["record-prefix"].length }}
         />
         <FormHelperText id="record-prefix-helper-text">
-          Set Record Type = IND (Instrumentation Detail). (Size:{" "}
-          {IndFormConfig["record-prefix"].length})
+          Set Record Type = ALT (Alternate Title). (Size:{" "}
+          {AltFormConfig["record-prefix"].length})
         </FormHelperText>
       </FormControl>
       <br />
 
       <FormControl>
-        <InputLabel htmlFor="instrument-code">instrument-code</InputLabel>
+        <InputLabel htmlFor="alternate-title">Alternate Title</InputLabel>
         <Input
-          id="instrument-code"
-          aria-describedby="instrument-code-helper-text"
-          value={altForm["instrument-code"]}
+          id="alternate-title"
+          aria-describedby="alternate-title-helper-text"
+          value={altForm["alternate-title"]}
           onChange={handleInputChange}
-          inputProps={{ maxLength: IndFormConfig["instrument-code"].length }}
+          inputProps={{ maxLength: AltFormConfig["alternate-title"].length }}
         />
-        <FormHelperText id="instrument-code-helper-text">
-          Indicates the use of a specific instrument in this version of
-          instrumentation. These values reside in the Instrument Table. (Size:{" "}
-          {IndFormConfig["instrument-code"].length})
+        <FormHelperText id="alternate-title-helper-text">
+          AKA or pseudonym of the work title.. (Size:{" "}
+          {AltFormConfig["alternate-title"].length})
         </FormHelperText>
       </FormControl>
       <br />
 
       <FormControl>
-        <InputLabel htmlFor="numbers-of-players">Numbers Of Players</InputLabel>
+        <InputLabel htmlFor="title-type">Title Type</InputLabel>
         <Input
-          id="numbers-of-players"
-          aria-describedby="numbers-of-players-helper-text"
-          value={altForm["numbers-of-players"]}
+          id="title-type"
+          aria-describedby="title-type-helper-text"
+          value={altForm["title-type"]}
           onChange={handleInputChange}
-          inputProps={{ maxLength: IndFormConfig["numbers-of-players"].length }}
+          inputProps={{ maxLength: AltFormConfig["title-type"].length }}
         />
-        <FormHelperText id="numbers-of-players-helper-text">
-          Indicates the number of players for the above instrument. (Size:{" "}
-          {IndFormConfig["numbers-of-players"].length})
+        <FormHelperText id="title-type-helper-text">
+          Indicates the type of alternate title presented on this record. These
+          values reside in the Title Type Table. (Size:{" "}
+          {AltFormConfig["title-type"].length})
+        </FormHelperText>
+      </FormControl>
+
+      <br />
+
+      <FormControl>
+        <InputLabel htmlFor="language-code">Language Code</InputLabel>
+        <Input
+          id="language-code"
+          aria-describedby="language-code-helper-text"
+          value={altForm["language-code"]}
+          onChange={handleInputChange}
+          inputProps={{ maxLength: AltFormConfig["language-code"].length }}
+        />
+        <FormHelperText id="language-code-helper-text">
+          The code representing the language that this alternate title has been
+          translated into. These values reside in the Language Code Table. A
+          language Code Must be entered if the Title Type is equal to “OL” or
+          “AL”. (Size: {AltFormConfig["language-code"].length})
         </FormHelperText>
       </FormControl>
 

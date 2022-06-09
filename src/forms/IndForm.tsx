@@ -70,7 +70,7 @@ const IndForm = () => {
       <br />
 
       <FormControl>
-        <InputLabel htmlFor="instrument-code">instrument-code</InputLabel>
+        <InputLabel htmlFor="instrument-code">Instrument Code</InputLabel>
         <Input
           id="instrument-code"
           aria-describedby="instrument-code-helper-text"

@@ -1,4 +1,5 @@
 import React, { createContext, memo, useState } from "react";
+import { IAltForm } from "../forms/AltForm";
 import { IGrhForm } from "../forms/GrhForm";
 import { IGrtForm } from "../forms/GrtForm";
 import { IHdrForm } from "../forms/HdrForm";
@@ -11,11 +12,13 @@ export interface IFormContext {
   hdr: IHdrForm;
   nwr: INwrForm;
   ind: IIndForm;
+  alt: IAltForm;
   handleUpdateGrhForm: (grh: IGrhForm) => void;
   handleUpdateGrtForm: (grt: IGrtForm) => void;
   handleUpdateHdrForm: (hdr: IHdrForm) => void;
   handleUpdateNrwForm: (nwr: INwrForm) => void;
   handleUpdateIndForm: (nwr: IIndForm) => void;
+  handleUpdateAltForm: (nwr: IAltForm) => void;
 }
 
 export const initFormContextValues: IFormContext = {
@@ -81,11 +84,18 @@ export const initFormContextValues: IFormContext = {
     "instrument-code": "",
     "numbers-of-players": "",
   },
+  alt: {
+    "record-prefix": "ALT",
+    "alternate-title": "",
+    "title-type": "",
+    "language-code": "",
+  },
   handleUpdateGrhForm: (grh: IGrhForm) => {},
   handleUpdateGrtForm: (grt: IGrtForm) => {},
   handleUpdateHdrForm: (hdr: IHdrForm) => {},
   handleUpdateNrwForm: (nwr: INwrForm) => {},
   handleUpdateIndForm: (nwr: IIndForm) => {},
+  handleUpdateAltForm: (nwr: IAltForm) => {},
 };
 
 export const CreateFormContext = createContext<IFormContext>(
@@ -124,17 +134,25 @@ export const CreateFormContextProvider = memo(
         ind,
       }));
     };
+    const handleUpdateAltForm = (alt: IAltForm) => {
+      setState((prevState: IFormContext) => ({
+        ...prevState,
+        alt,
+      }));
+    };
     const [state, setState] = useState({
       grh: {},
       grt: {},
       hdr: {},
       nwr: {},
       ind: {},
+      alt: {},
       handleUpdateGrhForm,
       handleUpdateGrtForm,
       handleUpdateNrwForm,
       handleUpdateHdrForm,
       handleUpdateIndForm,
+      handleUpdateAltForm
     } as IFormContext);
 
     return (

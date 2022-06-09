@@ -7,6 +7,7 @@ import { lyricAdaptation } from "../referenceTables/lyricAdaptation";
 import { musicalWorkDistributionCategory } from "../referenceTables/musicalWorkDistributionCategory";
 import { musicArrangement } from "../referenceTables/musicArrangement";
 import { textMusicRelationship } from "../referenceTables/textMusicRelationship";
+import { titleType } from "../referenceTables/titleType";
 import { versionType } from "../referenceTables/versionType";
 
 export const tableKeyGen = (table: Record<string, string>): string => {
@@ -58,6 +59,9 @@ export const instrumentsKenGen = (): string => {
   return tableKeyGen(instruments);
 };
 
+export const titleTypesKenGen = (): string => {
+  return tableKeyGen(titleType);
+};
 
 export const booleanValueGen = (): string => {
   return tableKeyGen({ Y: "Y", N: "N" });
