@@ -9,9 +9,13 @@ import React, { useState, useCallback, useContext } from "react";
 import { AltFormConfig } from "../configurations/AltFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
 import { numericOnlyGen, wordsGen } from "../utils/dummyDataGenerators";
-import { languageKeyGen, titleTypesKenGen } from "../utils/referenceTableKeyGenerator";
+import {
+  languageKeyGen,
+  titleTypesKenGen,
+} from "../utils/referenceTableKeyGenerator";
+import IFormBase from "./IFormBase";
 
-export interface IAltForm {
+export interface IAltForm extends IFormBase {
   "record-prefix": string;
   "alternate-title": string;
   "title-type": string;

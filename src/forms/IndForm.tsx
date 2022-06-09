@@ -10,8 +10,9 @@ import { IndFormConfig } from "../configurations/IndFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
 import { numericOnlyGen } from "../utils/dummyDataGenerators";
 import { instrumentsKenGen } from "../utils/referenceTableKeyGenerator";
+import IFormBase from "./IFormBase";
 
-export interface IIndForm {
+export interface IIndForm extends IFormBase {
   "record-prefix": string;
   "instrument-code": string;
   "numbers-of-players": string;

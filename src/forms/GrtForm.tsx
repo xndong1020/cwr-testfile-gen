@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { CreateFormContext } from "../contexts/FormContext";
 import { whitespaceOnlygGen } from "../utils/dummyDataGenerators";
+import IFormBase from "./IFormBase";
 
 export interface IGrtForm {
   "record-type": string;
@@ -21,7 +22,7 @@ export const initGrtForm = {
   "total-monetary-value": whitespaceOnlygGen(10),
 };
 
-interface GrtFormProps {
+interface GrtFormProps extends IFormBase {
   groupId: number;
   transactionCount: number;
   recordCount: number;

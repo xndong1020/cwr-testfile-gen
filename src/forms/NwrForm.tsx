@@ -33,8 +33,9 @@ import {
 } from "../utils/referenceTableKeyGenerator";
 import { NwrFieldsLength } from "../configurations/NwrFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
+import IFormBase from "./IFormBase";
 
-export interface INwrForm {
+export interface INwrForm extends IFormBase {
   "record-type": string;
   "transaction-sequence-number": string;
   "record-sequence-number": string;

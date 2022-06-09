@@ -16,8 +16,9 @@ import {
   wordsGen,
 } from "../utils/dummyDataGenerators";
 import { itemGenFromArray } from "../utils/referenceTableKeyGenerator";
+import IFormBase from "./IFormBase";
 
-export interface IHdrForm {
+export interface IHdrForm extends IFormBase {
   "record-type": string;
   "sender-type": string;
   "sender-id": string;

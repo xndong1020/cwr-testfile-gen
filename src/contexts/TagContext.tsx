@@ -2,14 +2,18 @@ import React, { createContext, memo, useState } from "react";
 
 export interface ITagContext {
   activeHdrCount: number;
+  activeAltCount: number;
   activeNwrCount: number;
   activeIndCount: number;
+  activeGroupsCount: number;
   handleSetItemActive: (name: string) => void;
 }
 export const initTagContextValues: ITagContext = {
   activeHdrCount: 0,
+  activeAltCount: 0,
   activeNwrCount: 0,
   activeIndCount: 0,
+  activeGroupsCount: 0,
   handleSetItemActive: (name: string) => {},
 };
 
@@ -41,14 +45,31 @@ export const CreateTagContextProvider = memo(
           }));
           break;
 
+        case "GRH":
+        case "GRT":
+          setState((prevState: ITagContext) => ({
+            ...prevState,
+            activeGroupsCount: prevState.activeGroupsCount + 1,
+          }));
+          break;
+
+        case "ALT":
+          setState((prevState: ITagContext) => ({
+            ...prevState,
+            activeAltCount: prevState.activeAltCount + 1,
+          }));
+          break;
+
         default:
           break;
       }
     };
     const [state, setState] = useState({
       activeHdrCount: 0,
+      activeAltCount: 0,
       activeNwrCount: 0,
       activeIndCount: 0,
+      activeGroupsCount: 0,
       handleSetItemActive,
     } as ITagContext);
 

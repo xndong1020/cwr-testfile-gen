@@ -2,8 +2,9 @@ import { Paper } from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { CreateFormContext } from "../contexts/FormContext";
 import { whitespaceOnlygGen } from "../utils/dummyDataGenerators";
+import IFormBase from "./IFormBase";
 
-export interface IGrhForm {
+export interface IGrhForm extends IFormBase {
   "record-type": string;
   "transaction-type": string;
   "group-id": string;

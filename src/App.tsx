@@ -1,64 +1,47 @@
-import {
-  Button,
-  Paper,
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-  Box,
-  Grid,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import NwrForm from "./forms/NwrForm";
+import { Button, Paper, Box, Grid } from "@mui/material";
 import { CreateFormContext } from "./contexts/FormContext";
-import React, { useContext } from "react";
-import GrtForm from "./forms/GrtForm";
-import GrhForm from "./forms/GrhForm";
+import React, { useContext, useState, useEffect } from "react";
 import HdrForm from "./forms/HdrForm";
 import DndContainer from "./components/DndContainer";
 import DndTag from "./components/DndTag";
 import { CreateTagContext } from "./contexts/TagContext";
-import IndForm from "./forms/IndForm";
+import { recordStringGen } from "./utils/recordStringGen";
+import { Expandable } from "./components/Expandable";
+import GroupContainer from "./components/GroupContainer";
 
 function App() {
-  const { nwr, hdr, grh, grt, ind } = useContext(CreateFormContext);
-  const { activeHdrCount, activeNwrCount, activeIndCount } =
-    useContext(CreateTagContext);
+  const { nwr, hdr, grh, grt, ind, alt } = useContext(CreateFormContext);
+  const {
+    activeHdrCount,
+    activeAltCount,
+    activeNwrCount,
+    activeIndCount,
+    activeGroupsCount,
+  } = useContext(CreateTagContext);
+
+  console.log("activeGroupsCount", activeGroupsCount);
+
+  const [groupNumber, setGroupNumber] = useState(0);
+
+  useEffect(() => {
+    const createGroups = (activeGroupsCount: number) => {
+      setGroupNumber(activeGroupsCount);
+    };
+    createGroups(activeGroupsCount);
+  }, [activeGroupsCount]);
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const grhString = Object.values(grh).reduce((accu, cur) => {
-      accu += cur;
-      return accu;
-    }, "");
-    const grtString = Object.values(grt).reduce((accu, cur) => {
-      accu += cur;
-      return accu;
-    }, "");
-    const hdrString = Object.values(hdr).reduce((accu, cur) => {
-      accu += cur;
-      return accu;
-    }, "");
-    const nwrString = Object.values(nwr).reduce((accu, cur) => {
-      accu += cur;
-      return accu;
-    }, "");
-    const indString = Object.values(ind).reduce((accu, cur) => {
-      accu += cur;
-      return accu;
-    }, "");
     var element = document.createElement("a");
     element.setAttribute(
       "href",
       "data:text/plain;charset=utf-8," +
-        hdrString +
-        "\n" +
-        grhString +
-        "\n" +
-        nwrString +
-        "\n" +
-        indString +
-        "\n" +
-        grtString
+        recordStringGen(hdr) +
+        recordStringGen(grh) +
+        recordStringGen(nwr) +
+        recordStringGen(alt) +
+        recordStringGen(ind) +
+        recordStringGen(grt, true)
     );
     element.setAttribute("download", "test.V21");
 
@@ -69,6 +52,28 @@ function App() {
 
     document.body.removeChild(element);
   };
+
+  const groupBuilder = (groupNumber: number): JSX.Element[] => {
+    console.log("groupBuilder", groupNumber);
+    const groupElems = [] as JSX.Element[];
+    if (!groupNumber) return groupElems;
+
+    for (let index = 0; index < groupNumber; index++) {
+      groupElems.push(
+        <GroupContainer
+          groupIndex={index}
+          activeGroupsCount={activeGroupsCount}
+          activeAltCount={activeAltCount}
+          activeNwrCount={activeNwrCount}
+          activeIndCount={activeIndCount}
+          key={index}
+        />
+      );
+    }
+    console.log("groupElems", groupElems);
+    return groupElems;
+  };
+
   return (
     <>
       <Grid container spacing={2}>
@@ -77,57 +82,33 @@ function App() {
             <DndContainer allowedDropEffect="copy" />
             <form onSubmit={submitHandler}>
               {!!activeHdrCount && (
-                <Box>
-                  <Accordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>Add Transmission Header</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <HdrForm />
-                    </AccordionDetails>
-                  </Accordion>
-                </Box>
+                <Expandable
+                  title="Add Transmission Header"
+                  name="fileHeader"
+                  element={<HdrForm />}
+                />
               )}
-              <GrhForm groupId={1} batchRequest={1} />
-              {!!activeNwrCount && (
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Add NWR Record</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <NwrForm type={"NWR"} transactionSeq={0} recordSeq={1} />
-                  </AccordionDetails>
-                </Accordion>
-              )}
-
-              {!!activeIndCount && (
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Add IND Record</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <IndForm />
-                  </AccordionDetails>
-                </Accordion>
-              )}
-              <GrtForm
-                groupId={1}
-                transactionCount={1}
-                recordCount={activeNwrCount + activeIndCount}
-              />
+              {/* {[...Array(groupNumber)].map((_, index) => {
+                return (
+                  <GroupContainer
+                    groupIndex={index}
+                    activeGroupsCount={index}
+                    activeAltCount={index}
+                    activeNwrCount={index}
+                    activeIndCount={index}
+                    key={index}
+                  />
+                );
+              })} */}
               <br />
+              <GroupContainer
+                groupIndex={1}
+                activeGroupsCount={activeGroupsCount}
+                activeAltCount={activeAltCount}
+                activeNwrCount={activeNwrCount}
+                activeIndCount={activeIndCount}
+                key={1}
+              />
               <Button type="submit" variant="contained" color="primary">
                 save
               </Button>
@@ -137,6 +118,9 @@ function App() {
         <Grid item xs={3}>
           <Paper>
             <Box sx={{ border: "1px dashed #888", height: 400 }}>
+              <DndTag name="GRH" />
+              <DndTag name="GRT" />
+              <DndTag name="ALT" />
               <DndTag name="HDR" />
               <DndTag name="IND" />
               <DndTag name="NWR" />
