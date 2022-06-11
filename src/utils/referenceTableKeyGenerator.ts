@@ -6,6 +6,7 @@ import { languageCodeTable } from "../referenceTables/language";
 import { lyricAdaptation } from "../referenceTables/lyricAdaptation";
 import { musicalWorkDistributionCategory } from "../referenceTables/musicalWorkDistributionCategory";
 import { musicArrangement } from "../referenceTables/musicArrangement";
+import { standardInstrumentation } from "../referenceTables/standardInstrumentation";
 import { textMusicRelationship } from "../referenceTables/textMusicRelationship";
 import { titleType } from "../referenceTables/titleType";
 import { versionType } from "../referenceTables/versionType";
@@ -57,6 +58,10 @@ export const cwrWorkTypeKenGen = (): string => {
 
 export const instrumentsKenGen = (): string => {
   return tableKeyGen(instruments);
+};
+
+export const standardInstrumentsKenGen = (): string => {
+  return tableKeyGen(standardInstrumentation);
 };
 
 export const titleTypesKenGen = (): string => {

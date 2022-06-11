@@ -5,6 +5,7 @@ export interface ITagContext {
   activeAltCount: number;
   activeNwrCount: number;
   activeIndCount: number;
+  activeInsCount: number;
   activeGroupsCount: number;
   handleSetItemActive: (name: string) => void;
 }
@@ -13,6 +14,7 @@ export const initTagContextValues: ITagContext = {
   activeAltCount: 0,
   activeNwrCount: 0,
   activeIndCount: 0,
+  activeInsCount: 0,
   activeGroupsCount: 0,
   handleSetItemActive: (name: string) => {},
 };
@@ -45,6 +47,13 @@ export const CreateTagContextProvider = memo(
           }));
           break;
 
+        case "INS":
+          setState((prevState: ITagContext) => ({
+            ...prevState,
+            activeInsCount: prevState.activeInsCount + 1,
+          }));
+          break;
+
         case "GRH":
         case "GRT":
           setState((prevState: ITagContext) => ({
@@ -69,6 +78,7 @@ export const CreateTagContextProvider = memo(
       activeAltCount: 0,
       activeNwrCount: 0,
       activeIndCount: 0,
+      activeInsCount: 0,
       activeGroupsCount: 0,
       handleSetItemActive,
     } as ITagContext);

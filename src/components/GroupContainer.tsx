@@ -4,12 +4,14 @@ import GrhForm from "../forms/GrhForm";
 import IndForm from "../forms/IndForm";
 import AltForm from "../forms/AltForm";
 import { Expandable } from "../components/Expandable";
+import InsForm from "../forms/InsForm";
 
 interface IGroupContainerProps {
   groupIndex: number;
   activeNwrCount: number;
   activeAltCount: number;
   activeIndCount: number;
+  activeInsCount: number;
   activeGroupsCount: number;
 }
 
@@ -18,6 +20,7 @@ const GroupContainer = ({
   activeNwrCount,
   activeAltCount,
   activeIndCount,
+  activeInsCount,
   activeGroupsCount,
 }: IGroupContainerProps) => {
   return (
@@ -44,15 +47,26 @@ const GroupContainer = ({
       {!!activeIndCount && (
         <Expandable
           title="Add IND Record"
-          name="intRecord"
+          name="indRecord"
           element={<IndForm />}
         />
       )}
+
+      {!!activeInsCount && (
+        <Expandable
+          title="Add INS Record"
+          name="insRecord"
+          element={<InsForm />}
+        />
+      )}
+
       {!!groupIndex && (
         <GrtForm
           groupId={groupIndex}
           transactionCount={activeGroupsCount}
-          recordCount={activeAltCount + activeNwrCount + activeIndCount}
+          recordCount={
+            activeAltCount + activeNwrCount + activeIndCount + activeInsCount
+          }
         />
       )}
     </>

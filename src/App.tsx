@@ -10,12 +10,13 @@ import { Expandable } from "./components/Expandable";
 import GroupContainer from "./components/GroupContainer";
 
 function App() {
-  const { nwr, hdr, grh, grt, ind, alt } = useContext(CreateFormContext);
+  const { nwr, hdr, grh, grt, ind, ins, alt } = useContext(CreateFormContext);
   const {
     activeHdrCount,
     activeAltCount,
     activeNwrCount,
     activeIndCount,
+    activeInsCount,
     activeGroupsCount,
   } = useContext(CreateTagContext);
 
@@ -41,6 +42,7 @@ function App() {
         recordStringGen(nwr) +
         recordStringGen(alt) +
         recordStringGen(ind) +
+        recordStringGen(ins) +
         recordStringGen(grt, true)
     );
     element.setAttribute("download", "test.V21");
@@ -53,26 +55,26 @@ function App() {
     document.body.removeChild(element);
   };
 
-  const groupBuilder = (groupNumber: number): JSX.Element[] => {
-    console.log("groupBuilder", groupNumber);
-    const groupElems = [] as JSX.Element[];
-    if (!groupNumber) return groupElems;
+  // const groupBuilder = (groupNumber: number): JSX.Element[] => {
+  //   console.log("groupBuilder", groupNumber);
+  //   const groupElems = [] as JSX.Element[];
+  //   if (!groupNumber) return groupElems;
 
-    for (let index = 0; index < groupNumber; index++) {
-      groupElems.push(
-        <GroupContainer
-          groupIndex={index}
-          activeGroupsCount={activeGroupsCount}
-          activeAltCount={activeAltCount}
-          activeNwrCount={activeNwrCount}
-          activeIndCount={activeIndCount}
-          key={index}
-        />
-      );
-    }
-    console.log("groupElems", groupElems);
-    return groupElems;
-  };
+  //   for (let index = 0; index < groupNumber; index++) {
+  //     groupElems.push(
+  //       <GroupContainer
+  //         groupIndex={index}
+  //         activeGroupsCount={activeGroupsCount}
+  //         activeAltCount={activeAltCount}
+  //         activeNwrCount={activeNwrCount}
+  //         activeIndCount={activeIndCount}
+  //         key={index}
+  //       />
+  //     );
+  //   }
+  //   console.log("groupElems", groupElems);
+  //   return groupElems;
+  // };
 
   return (
     <>
@@ -107,6 +109,7 @@ function App() {
                 activeAltCount={activeAltCount}
                 activeNwrCount={activeNwrCount}
                 activeIndCount={activeIndCount}
+                activeInsCount={activeInsCount}
                 key={1}
               />
               <Button type="submit" variant="contained" color="primary">
@@ -122,6 +125,7 @@ function App() {
               <DndTag name="GRT" />
               <DndTag name="ALT" />
               <DndTag name="HDR" />
+              <DndTag name="INS" />
               <DndTag name="IND" />
               <DndTag name="NWR" />
             </Box>

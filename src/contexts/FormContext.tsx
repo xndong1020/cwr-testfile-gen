@@ -4,6 +4,7 @@ import { IGrhForm } from "../forms/GrhForm";
 import { IGrtForm } from "../forms/GrtForm";
 import { IHdrForm } from "../forms/HdrForm";
 import { IIndForm } from "../forms/IndForm";
+import { IInsForm } from "../forms/InsForm";
 import { INwrForm } from "../forms/NwrForm";
 
 export interface IFormContext {
@@ -12,12 +13,14 @@ export interface IFormContext {
   hdr: IHdrForm;
   nwr: INwrForm;
   ind: IIndForm;
+  ins: IInsForm;
   alt: IAltForm;
   handleUpdateGrhForm: (grh: IGrhForm) => void;
   handleUpdateGrtForm: (grt: IGrtForm) => void;
   handleUpdateHdrForm: (hdr: IHdrForm) => void;
   handleUpdateNrwForm: (nwr: INwrForm) => void;
   handleUpdateIndForm: (nwr: IIndForm) => void;
+  handleUpdateInsForm: (nwr: IInsForm) => void;
   handleUpdateAltForm: (nwr: IAltForm) => void;
 }
 
@@ -84,6 +87,12 @@ export const initFormContextValues: IFormContext = {
     "instrument-code": "",
     "numbers-of-players": "",
   },
+  ins: {
+    "record-prefix": "INS",
+    "number-of-voices": "",
+    "standard-instrumentation-type": "",
+    "instrumentation-description": "",
+  },
   alt: {
     "record-prefix": "ALT",
     "alternate-title": "",
@@ -95,6 +104,7 @@ export const initFormContextValues: IFormContext = {
   handleUpdateHdrForm: (hdr: IHdrForm) => {},
   handleUpdateNrwForm: (nwr: INwrForm) => {},
   handleUpdateIndForm: (nwr: IIndForm) => {},
+  handleUpdateInsForm: (nwr: IInsForm) => {},
   handleUpdateAltForm: (nwr: IAltForm) => {},
 };
 
@@ -134,6 +144,12 @@ export const CreateFormContextProvider = memo(
         ind,
       }));
     };
+    const handleUpdateInsForm = (ins: IInsForm) => {
+      setState((prevState: IFormContext) => ({
+        ...prevState,
+        ins,
+      }));
+    };
     const handleUpdateAltForm = (alt: IAltForm) => {
       setState((prevState: IFormContext) => ({
         ...prevState,
@@ -146,13 +162,15 @@ export const CreateFormContextProvider = memo(
       hdr: {},
       nwr: {},
       ind: {},
+      ins: {},
       alt: {},
       handleUpdateGrhForm,
       handleUpdateGrtForm,
       handleUpdateNrwForm,
       handleUpdateHdrForm,
       handleUpdateIndForm,
-      handleUpdateAltForm
+      handleUpdateInsForm,
+      handleUpdateAltForm,
     } as IFormContext);
 
     return (
