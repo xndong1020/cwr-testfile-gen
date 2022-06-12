@@ -6,7 +6,6 @@ import theme from "./theme";
 import { CreateFormContextProvider } from "./contexts/FormContext";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { CreateTagContextProvider } from "./contexts/TagContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,11 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider theme={theme}>
     <DndProvider backend={HTML5Backend}>
-      <CreateTagContextProvider>
-        <CreateFormContextProvider>
-          <App />
-        </CreateFormContextProvider>
-      </CreateTagContextProvider>
+      <CreateFormContextProvider>
+        <App />
+      </CreateFormContextProvider>
     </DndProvider>
   </ThemeProvider>
 );

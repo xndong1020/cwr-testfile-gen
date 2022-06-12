@@ -4,46 +4,32 @@ import React, { useContext, useState, useEffect } from "react";
 import HdrForm from "./forms/HdrForm";
 import DndContainer from "./components/DndContainer";
 import DndTag from "./components/DndTag";
-import { CreateTagContext } from "./contexts/TagContext";
 import { recordStringGen } from "./utils/recordStringGen";
 import { Expandable } from "./components/Expandable";
 import GroupContainer from "./components/GroupContainer";
 
 function App() {
-  const { nwr, hdr, grh, grt, ind, ins, alt } = useContext(CreateFormContext);
-  const {
-    activeHdrCount,
-    activeAltCount,
-    activeNwrCount,
-    activeIndCount,
-    activeInsCount,
-    activeGroupsCount,
-  } = useContext(CreateTagContext);
+  const { hdr, groups } = useContext(CreateFormContext);
 
-  console.log("activeGroupsCount", activeGroupsCount);
-
-  const [groupNumber, setGroupNumber] = useState(0);
-
-  useEffect(() => {
-    const createGroups = (activeGroupsCount: number) => {
-      setGroupNumber(activeGroupsCount);
-    };
-    createGroups(activeGroupsCount);
-  }, [activeGroupsCount]);
+  console.log("groups", groups);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let dataToProcess = recordStringGen(hdr);
+
+    for (const { grh, grt, alt, nwr, ind, ins } of groups) {
+      dataToProcess += recordStringGen(grh);
+      dataToProcess += !!nwr ? recordStringGen(nwr) : "";
+      dataToProcess += !!alt ? recordStringGen(alt) : "";
+      dataToProcess += !!ind ? recordStringGen(ind) : "";
+      dataToProcess += !!ins ? recordStringGen(ins) : "";
+      dataToProcess += recordStringGen(grt);
+    }
+
     var element = document.createElement("a");
     element.setAttribute(
       "href",
-      "data:text/plain;charset=utf-8," +
-        recordStringGen(hdr) +
-        recordStringGen(grh) +
-        recordStringGen(nwr) +
-        recordStringGen(alt) +
-        recordStringGen(ind) +
-        recordStringGen(ins) +
-        recordStringGen(grt, true)
+      "data:text/plain;charset=utf-8," + dataToProcess
     );
     element.setAttribute("download", "test.V21");
 
@@ -83,35 +69,21 @@ function App() {
           <Paper>
             <DndContainer allowedDropEffect="copy" />
             <form onSubmit={submitHandler}>
-              {!!activeHdrCount && (
-                <Expandable
-                  title="Add Transmission Header"
-                  name="fileHeader"
-                  element={<HdrForm />}
-                />
-              )}
-              {/* {[...Array(groupNumber)].map((_, index) => {
+              <Expandable
+                title="Add Transmission Header"
+                name="fileHeader"
+                element={<HdrForm />}
+              />
+              {groups.map((group, index) => {
                 return (
                   <GroupContainer
                     groupIndex={index}
-                    activeGroupsCount={index}
-                    activeAltCount={index}
-                    activeNwrCount={index}
-                    activeIndCount={index}
+                    totalGroups={groups.length}
                     key={index}
                   />
                 );
-              })} */}
-              <br />
-              <GroupContainer
-                groupIndex={1}
-                activeGroupsCount={activeGroupsCount}
-                activeAltCount={activeAltCount}
-                activeNwrCount={activeNwrCount}
-                activeIndCount={activeIndCount}
-                activeInsCount={activeInsCount}
-                key={1}
-              />
+              })}
+
               <Button type="submit" variant="contained" color="primary">
                 save
               </Button>
@@ -121,8 +93,7 @@ function App() {
         <Grid item xs={3}>
           <Paper>
             <Box sx={{ border: "1px dashed #888", height: 400 }}>
-              <DndTag name="GRH" />
-              <DndTag name="GRT" />
+              <DndTag name="NEW GROUP" />
               <DndTag name="ALT" />
               <DndTag name="HDR" />
               <DndTag name="INS" />

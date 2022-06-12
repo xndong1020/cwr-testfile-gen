@@ -1,3 +1,6 @@
+import React, { useContext } from "react";
+import { CreateFormContext } from "../contexts/FormContext";
+
 import NwrForm from "../forms/NwrForm";
 import GrtForm from "../forms/GrtForm";
 import GrhForm from "../forms/GrhForm";
@@ -8,27 +11,27 @@ import InsForm from "../forms/InsForm";
 
 interface IGroupContainerProps {
   groupIndex: number;
-  activeNwrCount: number;
-  activeAltCount: number;
-  activeIndCount: number;
-  activeInsCount: number;
-  activeGroupsCount: number;
+  totalGroups: number;
 }
 
-const GroupContainer = ({
-  groupIndex,
-  activeNwrCount,
-  activeAltCount,
-  activeIndCount,
-  activeInsCount,
-  activeGroupsCount,
-}: IGroupContainerProps) => {
+const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
+  const { groups } = useContext(CreateFormContext);
+
+  const { nwr, alt, ind, ins } = groups[groupIndex];
+
+  const recordCount = Object.entries(groups[groupIndex])
+    .filter(([key, val]) => !!val && !["grh", "grt"].includes(key))
+    .reduce((acc, val) => {
+      acc += 1;
+      return acc;
+    }, 0);
+
   return (
     <>
-      {!!groupIndex && (
-        <GrhForm groupId={groupIndex} batchRequest={activeGroupsCount} />
+      {!!totalGroups && (
+        <GrhForm groupId={groupIndex} batchRequest={totalGroups} />
       )}
-      {!!activeNwrCount && (
+      {!!nwr && (
         <Expandable
           title="Add NWR Record"
           name="nwrRecord"
@@ -36,7 +39,7 @@ const GroupContainer = ({
         />
       )}
 
-      {!!activeAltCount && (
+      {!!alt && (
         <Expandable
           title="Add ALT Record"
           name="altRecord"
@@ -44,7 +47,7 @@ const GroupContainer = ({
         />
       )}
 
-      {!!activeIndCount && (
+      {!!ind && (
         <Expandable
           title="Add IND Record"
           name="indRecord"
@@ -52,7 +55,7 @@ const GroupContainer = ({
         />
       )}
 
-      {!!activeInsCount && (
+      {!!ins && (
         <Expandable
           title="Add INS Record"
           name="insRecord"
@@ -60,13 +63,11 @@ const GroupContainer = ({
         />
       )}
 
-      {!!groupIndex && (
+      {!!totalGroups && (
         <GrtForm
           groupId={groupIndex}
-          transactionCount={activeGroupsCount}
-          recordCount={
-            activeAltCount + activeNwrCount + activeIndCount + activeInsCount
-          }
+          transactionCount={totalGroups}
+          recordCount={recordCount}
         />
       )}
     </>

@@ -2,7 +2,7 @@ import { style } from "@mui/system";
 import React, { FC, useContext } from "react";
 import { useDrag, DragSourceMonitor } from "react-dnd";
 import { ItemTypes } from "../contants/ItemTypes";
-import { CreateTagContext } from "../contexts/TagContext";
+import { CreateFormContext } from "../contexts/FormContext";
 
 export interface DndTagProps {
   name: string;
@@ -15,7 +15,7 @@ interface DropResult {
 }
 
 const DndTag: FC<DndTagProps> = ({ name }) => {
-  const { handleSetItemActive } = useContext(CreateTagContext);
+  const { handleSetRecordActive } = useContext(CreateFormContext);
   const [{ opacity }, drag] = useDrag(
     () => ({
       type: ItemTypes.DNDTag,
@@ -24,7 +24,7 @@ const DndTag: FC<DndTagProps> = ({ name }) => {
         const dropResult = monitor.getDropResult() as DropResult;
         if (item && dropResult) {
           const itemName = item.name;
-          handleSetItemActive(itemName);
+          handleSetRecordActive(itemName);
         }
       },
       collect: (monitor: DragSourceMonitor) => ({

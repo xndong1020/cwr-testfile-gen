@@ -44,9 +44,9 @@ const GrtForm = ({ groupId, transactionCount, recordCount }: GrtFormProps) => {
     updateState();
   }, [groupId, transactionCount, recordCount, handleUpdateRecord]);
   return (
-    <Paper
-      elevation={3}
-    >{`Group Trailer for group: ${groupId}, Total Transactions: ${transactionCount}, Total Records: ${recordCount} `}</Paper>
+    <Paper elevation={3}>{`Group Trailer for group: ${
+      groupId + 1
+    }, Total Transactions: ${transactionCount}, Total Records: ${recordCount} `}</Paper>
   );
 };
 

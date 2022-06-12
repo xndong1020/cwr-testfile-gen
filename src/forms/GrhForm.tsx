@@ -46,7 +46,7 @@ const GrhForm = ({ groupId, batchRequest }: GrhFormProps) => {
   return (
     <Paper
       elevation={3}
-    >{`Group Header for group: ${groupId}, batch request: ${batchRequest}`}</Paper>
+    >{`Group Header for group: ${groupId + 1}, batch request: ${batchRequest}`}</Paper>
   );
 };
 
