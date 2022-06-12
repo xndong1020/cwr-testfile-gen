@@ -9,6 +9,7 @@ import { musicArrangement } from "../referenceTables/musicArrangement";
 import { standardInstrumentation } from "../referenceTables/standardInstrumentation";
 import { textMusicRelationship } from "../referenceTables/textMusicRelationship";
 import { titleType } from "../referenceTables/titleType";
+import { transactionType } from "../referenceTables/transactionType";
 import { versionType } from "../referenceTables/versionType";
 
 export const tableKeyGen = (table: Record<string, string>): string => {
@@ -66,6 +67,10 @@ export const standardInstrumentsKenGen = (): string => {
 
 export const titleTypesKenGen = (): string => {
   return tableKeyGen(titleType);
+};
+
+export const tansactionTypesKenGen = (): string => {
+  return tableKeyGen(transactionType);
 };
 
 export const booleanValueGen = (): string => {
