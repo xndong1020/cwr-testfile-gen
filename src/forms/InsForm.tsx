@@ -8,7 +8,7 @@ import {
 import React, { useState, useCallback, useContext } from "react";
 import { InsFormConfig } from "../configurations/InsFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
-import { numericOnlyGen } from "../utils/dummyDataGenerators";
+import { numericOnlyGen, wordsGen } from "../utils/dummyDataGenerators";
 import { standardInstrumentsKenGen } from "../utils/referenceTableKeyGenerator";
 import IFormBase from "./IFormBase";
 
@@ -42,15 +42,17 @@ const InsForm = () => {
     },
     []
   );
-  const handleGenerateInd = () => {
+  const handleGenerateIns = () => {
     const newInsForm = {
       "record-prefix":
-        "IND" + numericOnlyGen(InsFormConfig["record-prefix"].length - 3),
+        "INS" + numericOnlyGen(InsFormConfig["record-prefix"].length - 3),
       "number-of-voices": numericOnlyGen(
-        InsFormConfig["numbers-of-players"].length
+        InsFormConfig["number-of-voices"].length
       ),
       "standard-instrumentation-type": standardInstrumentsKenGen(),
-      "instrumentation-description": "",
+      "instrumentation-description": wordsGen(
+        InsFormConfig["instrumentation-description"].length
+      ),
     };
     setForm(newInsForm);
     handleUpdateInsForm(newInsForm);
@@ -115,7 +117,7 @@ const InsForm = () => {
 
       <FormControl>
         <InputLabel htmlFor="instrumentation-description">
-          nstrumentation Description
+          Instrumentation Description
         </InputLabel>
         <Input
           id="instrumentation-description"
@@ -139,7 +141,7 @@ const InsForm = () => {
       <Button
         variant="contained"
         color="success"
-        onClick={() => handleGenerateInd()}
+        onClick={() => handleGenerateIns()}
         sx={{
           paddingRight: 20,
         }}
