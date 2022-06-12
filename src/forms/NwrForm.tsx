@@ -67,7 +67,8 @@ export interface INwrForm extends IFormBase {
 }
 
 export const initNwrForm = {
-  "record-type": "",
+  type: "NWR",
+  "record-type": "NWR",
   "transaction-sequence-number": "",
   "record-sequence-number": "",
   "work-title": "",
@@ -105,7 +106,7 @@ interface NwrFormProps {
 
 const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
   const [nwrForm, setForm] = useState<INwrForm>(initNwrForm);
-  const { handleUpdateNrwForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +214,7 @@ const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
         : booleanValueGen(),
     };
     setForm(dummyNrw);
-    handleUpdateNrwForm(dummyNrw);
+    handleUpdateRecord(dummyNrw);
   };
 
   return (

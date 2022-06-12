@@ -20,6 +20,7 @@ export interface IInsForm extends IFormBase {
 }
 
 export const initInsForm = {
+  type: "INS",
   "record-prefix": "INS",
   "number-of-voices": "",
   "standard-instrumentation-type": "",
@@ -28,7 +29,7 @@ export const initInsForm = {
 
 const InsForm = () => {
   const [insForm, setForm] = useState<IInsForm>(initInsForm);
-  const { handleUpdateInsForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +45,7 @@ const InsForm = () => {
   );
   const handleGenerateIns = () => {
     const newInsForm = {
+      ...initInsForm,
       "record-prefix":
         "INS" + numericOnlyGen(InsFormConfig["record-prefix"].length - 3),
       "number-of-voices": numericOnlyGen(
@@ -55,7 +57,7 @@ const InsForm = () => {
       ),
     };
     setForm(newInsForm);
-    handleUpdateInsForm(newInsForm);
+    handleUpdateRecord(newInsForm);
   };
   return (
     <>

@@ -31,6 +31,7 @@ export interface IHdrForm extends IFormBase {
 }
 
 export const initHdrForm = {
+  type: "HDR",
   "record-type": "HDR",
   "sender-type": "",
   "sender-id": "",
@@ -44,7 +45,7 @@ export const initHdrForm = {
 
 const HdrForm = () => {
   const [hdrForm, setHdrForm] = useState<IHdrForm>(initHdrForm);
-  const { handleUpdateHdrForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +79,7 @@ const HdrForm = () => {
       ),
     };
     setHdrForm(hdr);
-    handleUpdateHdrForm(hdr);
+    handleUpdateRecord(hdr);
   };
 
   return (

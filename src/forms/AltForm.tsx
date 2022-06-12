@@ -23,6 +23,7 @@ export interface IAltForm extends IFormBase {
 }
 
 export const initAltForm = {
+  type: "ALT",
   "record-prefix": "ALT",
   "alternate-title": "",
   "title-type": "",
@@ -31,7 +32,7 @@ export const initAltForm = {
 
 const IndForm = () => {
   const [altForm, setForm] = useState<IAltForm>(initAltForm);
-  const { handleUpdateAltForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +48,7 @@ const IndForm = () => {
   );
   const handleGenerateInd = () => {
     const newAltForm = {
+      ...initAltForm,
       "record-prefix":
         "ALT" + numericOnlyGen(AltFormConfig["record-prefix"].length - 3),
       "alternate-title": wordsGen().toUpperCase(),
@@ -54,7 +56,7 @@ const IndForm = () => {
       "language-code": languageKeyGen(),
     };
     setForm(newAltForm);
-    handleUpdateAltForm(newAltForm);
+    handleUpdateRecord(newAltForm);
   };
   return (
     <>

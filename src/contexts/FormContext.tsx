@@ -3,9 +3,12 @@ import { IAltForm } from "../forms/AltForm";
 import { IGrhForm } from "../forms/GrhForm";
 import { IGrtForm } from "../forms/GrtForm";
 import { IHdrForm } from "../forms/HdrForm";
+import IFormBase from "../forms/IFormBase";
 import { IIndForm } from "../forms/IndForm";
 import { IInsForm } from "../forms/InsForm";
 import { INwrForm } from "../forms/NwrForm";
+
+export interface IGroups {}
 
 export interface IFormContext {
   grh: IGrhForm;
@@ -15,17 +18,12 @@ export interface IFormContext {
   ind: IIndForm;
   ins: IInsForm;
   alt: IAltForm;
-  handleUpdateGrhForm: (grh: IGrhForm) => void;
-  handleUpdateGrtForm: (grt: IGrtForm) => void;
-  handleUpdateHdrForm: (hdr: IHdrForm) => void;
-  handleUpdateNrwForm: (nwr: INwrForm) => void;
-  handleUpdateIndForm: (nwr: IIndForm) => void;
-  handleUpdateInsForm: (nwr: IInsForm) => void;
-  handleUpdateAltForm: (nwr: IAltForm) => void;
+  handleUpdateRecord: (record: IFormBase) => void;
 }
 
 export const initFormContextValues: IFormContext = {
   grh: {
+    type: "GRH",
     "record-type": "GRH",
     "transaction-type": "NWR",
     "group-id": "",
@@ -34,6 +32,7 @@ export const initFormContextValues: IFormContext = {
     "submission-distribution-type": "",
   },
   grt: {
+    type: "GRT",
     "record-type": "GRT",
     "group-id": "",
     "transaction-count": "",
@@ -42,6 +41,7 @@ export const initFormContextValues: IFormContext = {
     "total-monetary-value": "",
   },
   hdr: {
+    type: "HDR",
     "record-type": "HDR",
     "sender-type": "",
     "sender-id": "",
@@ -53,7 +53,8 @@ export const initFormContextValues: IFormContext = {
     "character-set": "",
   },
   nwr: {
-    "record-type": "",
+    type: "NWR",
+    "record-type": "NWR",
     "transaction-sequence-number": "",
     "record-sequence-number": "",
     "work-title": "",
@@ -83,78 +84,87 @@ export const initFormContextValues: IFormContext = {
     "priority-flag": "",
   },
   ind: {
+    type: "IND",
     "record-prefix": "IND",
     "instrument-code": "",
     "numbers-of-players": "",
   },
   ins: {
+    type: "INS",
     "record-prefix": "INS",
     "number-of-voices": "",
     "standard-instrumentation-type": "",
     "instrumentation-description": "",
   },
   alt: {
+    type: "ALT",
     "record-prefix": "ALT",
     "alternate-title": "",
     "title-type": "",
     "language-code": "",
   },
-  handleUpdateGrhForm: (grh: IGrhForm) => {},
-  handleUpdateGrtForm: (grt: IGrtForm) => {},
-  handleUpdateHdrForm: (hdr: IHdrForm) => {},
-  handleUpdateNrwForm: (nwr: INwrForm) => {},
-  handleUpdateIndForm: (nwr: IIndForm) => {},
-  handleUpdateInsForm: (nwr: IInsForm) => {},
-  handleUpdateAltForm: (nwr: IAltForm) => {},
+  handleUpdateRecord: (record: IFormBase) => {},
 };
 
 export const CreateFormContext = createContext<IFormContext>(
   initFormContextValues
 );
 
+function instanceOfIInsForm(object: any): object is IInsForm {
+  return "type" in object && object.type === "INS";
+}
+
 export const CreateFormContextProvider = memo(
   ({ children }: { children: any }): JSX.Element => {
-    const handleUpdateGrhForm = (grh: IGrhForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        grh,
-      }));
-    };
-    const handleUpdateGrtForm = (grt: IGrtForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        grt,
-      }));
-    };
-    const handleUpdateHdrForm = (hdr: IHdrForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        hdr,
-      }));
-    };
-    const handleUpdateNrwForm = (nwr: INwrForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        nwr,
-      }));
-    };
-    const handleUpdateIndForm = (ind: IIndForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        ind,
-      }));
-    };
-    const handleUpdateInsForm = (ins: IInsForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        ins,
-      }));
-    };
-    const handleUpdateAltForm = (alt: IAltForm) => {
-      setState((prevState: IFormContext) => ({
-        ...prevState,
-        alt,
-      }));
+    const handleUpdateRecord = (record: IFormBase) => {
+      console.log("record", record);
+      switch (record.type) {
+        case "GRH":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            grh: record as IGrhForm,
+          }));
+          break;
+        case "GRT":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            grt: record as IGrtForm,
+          }));
+          break;
+        case "HDR":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            hdr: record as IHdrForm,
+          }));
+          break;
+        case "NWR":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            hdr: record as IHdrForm,
+          }));
+          break;
+        case "IND":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            ind: record as IIndForm,
+          }));
+          break;
+        case "INS":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            ins: record as IInsForm,
+          }));
+          break;
+        case "ALT":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            hdr: record as IHdrForm,
+          }));
+          break;
+
+        default:
+          break;
+      }
     };
     const [state, setState] = useState({
       grh: {},
@@ -164,13 +174,7 @@ export const CreateFormContextProvider = memo(
       ind: {},
       ins: {},
       alt: {},
-      handleUpdateGrhForm,
-      handleUpdateGrtForm,
-      handleUpdateNrwForm,
-      handleUpdateHdrForm,
-      handleUpdateIndForm,
-      handleUpdateInsForm,
-      handleUpdateAltForm,
+      handleUpdateRecord,
     } as IFormContext);
 
     return (

@@ -19,6 +19,7 @@ export interface IIndForm extends IFormBase {
 }
 
 export const initIndForm = {
+  type: "IND",
   "record-prefix": "IND",
   "instrument-code": "",
   "numbers-of-players": "",
@@ -26,7 +27,7 @@ export const initIndForm = {
 
 const IndForm = () => {
   const [indForm, setForm] = useState<IIndForm>(initIndForm);
-  const { handleUpdateIndForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +43,7 @@ const IndForm = () => {
   );
   const handleGenerateInd = () => {
     const newIndForm = {
+      ...initIndForm,
       "record-prefix":
         "IND" + numericOnlyGen(IndFormConfig["record-prefix"].length - 3),
       "instrument-code": instrumentsKenGen(),
@@ -50,7 +52,7 @@ const IndForm = () => {
       ),
     };
     setForm(newIndForm);
-    handleUpdateIndForm(newIndForm);
+    handleUpdateRecord(newIndForm);
   };
   return (
     <>

@@ -4,7 +4,7 @@ import { CreateFormContext } from "../contexts/FormContext";
 import { whitespaceOnlygGen } from "../utils/dummyDataGenerators";
 import IFormBase from "./IFormBase";
 
-export interface IGrtForm {
+export interface IGrtForm extends IFormBase {
   "record-type": string;
   "group-id": string;
   "transaction-count": string;
@@ -14,6 +14,7 @@ export interface IGrtForm {
 }
 
 export const initGrtForm = {
+  type: "GRT",
   "record-type": "GRT",
   "group-id": "",
   "transaction-count": "",
@@ -22,27 +23,30 @@ export const initGrtForm = {
   "total-monetary-value": whitespaceOnlygGen(10),
 };
 
-interface GrtFormProps extends IFormBase {
+interface GrtFormProps {
   groupId: number;
   transactionCount: number;
   recordCount: number;
 }
 
 const GrtForm = ({ groupId, transactionCount, recordCount }: GrtFormProps) => {
-  const { handleUpdateGrtForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
   useEffect(() => {
     const updateState = () => {
-      handleUpdateGrtForm({
+      const newGrtForm = {
         ...initGrtForm,
         "group-id": ("" + groupId).padStart(5, "0"),
         "transaction-count": ("" + transactionCount).padStart(8, "0"),
         "record-count": ("" + recordCount).padStart(8, "0"),
-      });
+      };
+      handleUpdateRecord(newGrtForm);
     };
     updateState();
-  }, [groupId, transactionCount, recordCount, handleUpdateGrtForm]);
+  }, [groupId, transactionCount, recordCount, handleUpdateRecord]);
   return (
-    <Paper elevation={3}>{`Group Trailer for group: ${groupId}, Total Transactions: ${transactionCount}, Total Records: ${recordCount} `}</Paper>
+    <Paper
+      elevation={3}
+    >{`Group Trailer for group: ${groupId}, Total Transactions: ${transactionCount}, Total Records: ${recordCount} `}</Paper>
   );
 };
 

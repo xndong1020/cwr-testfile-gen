@@ -14,6 +14,7 @@ export interface IGrhForm extends IFormBase {
 }
 
 export const initGrhForm = {
+  type: "GRH",
   "record-type": "GRH",
   "transaction-type": "NWR",
   "group-id": "",
@@ -28,18 +29,19 @@ interface GrhFormProps {
 }
 
 const GrhForm = ({ groupId, batchRequest }: GrhFormProps) => {
-  const { handleUpdateGrhForm } = useContext(CreateFormContext);
+  const { handleUpdateRecord } = useContext(CreateFormContext);
 
   useEffect(() => {
     const updateState = () => {
-      handleUpdateGrhForm({
+      const newGrhForm = {
         ...initGrhForm,
         "group-id": ("" + groupId).padStart(5, "0"),
         "batch-request": ("" + batchRequest).padStart(10, "0"),
-      });
+      };
+      handleUpdateRecord(newGrhForm);
     };
     updateState();
-  }, [groupId, batchRequest, handleUpdateGrhForm]);
+  }, [groupId, batchRequest, handleUpdateRecord]);
 
   return (
     <Paper
