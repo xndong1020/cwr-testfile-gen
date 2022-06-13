@@ -14,9 +14,15 @@ interface IExpandableProps {
   name: string;
   title: string;
   element: ReactNode;
+  sx?: Record<any, any>;
 }
 
-export const Expandable = ({ name, title, element }: IExpandableProps) => {
+export const Expandable = ({
+  name,
+  title,
+  element,
+  sx = {},
+}: IExpandableProps) => {
   return (
     <Box>
       <Accordion>
@@ -24,6 +30,7 @@ export const Expandable = ({ name, title, element }: IExpandableProps) => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls={`${name}-content`}
           id={`${name}-header`}
+          sx={{ ...sx }}
         >
           <Typography>{title}</Typography>
         </AccordionSummary>

@@ -60,6 +60,7 @@ function App() {
                   title="Add Transmission Header"
                   name="fileHeader"
                   element={<HdrForm />}
+                  sx={{ backgroundColor: "pink" }}
                 />
                 {groups.map((group, index) => {
                   return (
@@ -74,7 +75,7 @@ function App() {
                 <br />
                 <br />
 
-                <TrlForm />
+                <TrlForm sx={{ backgroundColor: "pink" }} />
                 <br />
                 <br />
 

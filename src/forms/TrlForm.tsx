@@ -36,7 +36,11 @@ export const initTrlForm: ITrlForm = {
   "record-count": "",
 };
 
-const TrlForm = () => {
+interface ITrlFormProps {
+  sx?: Record<string, string>;
+}
+
+const TrlForm = ({ sx = {} }: ITrlFormProps) => {
   const {
     groups,
     handleUpdateRecord,
@@ -48,11 +52,7 @@ const TrlForm = () => {
     const updateState = () => {
       const records = groups;
       const numberOfTransactions = groups.reduce((acc, group) => {
-        Object.keys(group).forEach((key) => {
-          if (Object.keys(transactionType).includes(key.toUpperCase())) {
-            acc += 1;
-          }
-        });
+        acc += group.transactions.length;
         return acc;
       }, 0);
       const numberOfRecords = groups.reduce((acc, group) => {
@@ -83,6 +83,7 @@ const TrlForm = () => {
   return (
     <Paper
       elevation={3}
+      sx={{ ...sx, lineHeight: 3 }}
     >{`Transmission Trailer: Total Groups ${trl["group-count"]}, Total Transactions: ${trl["transaction-count"]}, Total Records: ${trl["record-count"]} `}</Paper>
   );
 };

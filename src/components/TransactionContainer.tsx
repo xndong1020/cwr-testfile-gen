@@ -6,6 +6,7 @@ import InsForm from "../forms/InsForm";
 import IndForm from "../forms/IndForm";
 import AltForm from "../forms/AltForm";
 import NwrForm from "../forms/NwrForm";
+import { Box } from "@mui/material";
 
 interface ITransactionContainerProps {
   groupIndex: number;
@@ -23,7 +24,7 @@ const TransactionContainer = ({
   const { alt, nwr, ind, ins } = currentTransaction;
 
   return (
-    <>
+    <Box sx={{ border: "2px dashed green" }}>
       {!!nwr && (
         <Expandable
           title="Add NWR Record"
@@ -55,7 +56,7 @@ const TransactionContainer = ({
           element={<InsForm />}
         />
       )}
-    </>
+    </Box>
   );
 };
 

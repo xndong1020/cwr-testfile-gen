@@ -25,7 +25,7 @@ const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
     }, 0);
 
   return (
-    <Box>
+    <Box sx={{ border: "2px dashed pink" }}>
       {!!totalGroups && (
         <GrhForm groupId={groupIndex} batchRequest={totalGroups} />
       )}
