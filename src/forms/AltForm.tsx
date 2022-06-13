@@ -31,7 +31,12 @@ export const initAltForm = {
   "language-code": "",
 };
 
-const IndForm = () => {
+interface AltFormProps {
+  transactionIndex: number;
+  recordIndex: number;
+}
+
+const IndForm = ({ transactionIndex, recordIndex }: AltFormProps) => {
   const [altForm, setForm] = useState<IAltForm>(initAltForm);
   const { handleUpdateRecord } = useContext(CreateFormContext);
 
@@ -51,7 +56,9 @@ const IndForm = () => {
     const newAltForm = {
       ...initAltForm,
       "record-prefix":
-        "ALT" + numericOnlyGen(AltFormConfig["record-prefix"].length - 3),
+        "ALT" +
+        transactionIndex.toString().padStart(8, "0") +
+        recordIndex.toString().padStart(8, "0"),
       "alternate-title": wordsGen().toUpperCase(),
       "title-type": titleTypesKenGen(),
       "language-code": languageKeyGen(),

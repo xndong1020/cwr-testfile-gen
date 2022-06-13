@@ -95,11 +95,11 @@ export const initNwrForm = {
 };
 
 interface NwrFormProps {
-  transactionSeq: number;
-  recordSeq: number;
+  transactionIndex: number;
+  recordIndex: number;
 }
 
-const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
+const NwrForm = ({ transactionIndex, recordIndex }: NwrFormProps) => {
   const [nwrForm, setForm] = useState<INwrForm>(initNwrForm);
   const { handleUpdateRecord } = useContext(CreateFormContext);
 
@@ -119,8 +119,8 @@ const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
   const handleGenerateNrw = (requiredFieldsOnly: boolean = false) => {
     const dummyNrw: INwrForm = {
       ...nwrForm,
-      "transaction-sequence-number": ("" + transactionSeq).padStart(8, "0"),
-      "record-sequence-number": ("" + recordSeq).padStart(8, "0"),
+      "transaction-sequence-number": ("" + transactionIndex).padStart(8, "0"),
+      "record-sequence-number": ("" + recordIndex).padStart(8, "0"),
       "work-title": wordsGen().toUpperCase(),
       "language-code": requiredFieldsOnly
         ? whitespaceOnlyGen(NwrFieldsLength["language-code"].length)

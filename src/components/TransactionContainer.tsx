@@ -7,6 +7,7 @@ import IndForm from "../forms/IndForm";
 import AltForm from "../forms/AltForm";
 import NwrForm from "../forms/NwrForm";
 import { Box } from "@mui/material";
+import IFormBase from "../forms/IFormBase";
 
 interface ITransactionContainerProps {
   groupIndex: number;
@@ -23,13 +24,24 @@ const TransactionContainer = ({
 
   const { alt, nwr, ind, ins } = currentTransaction;
 
+  const getRecordIndex = (recordName: string): number => {
+    return Object.keys(currentTransaction).findIndex(
+      (key) => key === recordName
+    );
+  };
+
   return (
     <Box sx={{ border: "2px dashed green" }}>
       {!!nwr && (
         <Expandable
           title="Add NWR Record"
           name="nwrRecord"
-          element={<NwrForm transactionSeq={0} recordSeq={1} />}
+          element={
+            <NwrForm
+              transactionIndex={transactionIndex}
+              recordIndex={getRecordIndex("nwr")}
+            />
+          }
         />
       )}
 
@@ -37,7 +49,12 @@ const TransactionContainer = ({
         <Expandable
           title="Add ALT Record"
           name="altRecord"
-          element={<AltForm />}
+          element={
+            <AltForm
+              transactionIndex={transactionIndex}
+              recordIndex={getRecordIndex("alt")}
+            />
+          }
         />
       )}
 
@@ -45,7 +62,12 @@ const TransactionContainer = ({
         <Expandable
           title="Add IND Record"
           name="indRecord"
-          element={<IndForm />}
+          element={
+            <IndForm
+              transactionIndex={transactionIndex}
+              recordIndex={getRecordIndex("ind")}
+            />
+          }
         />
       )}
 
@@ -53,7 +75,12 @@ const TransactionContainer = ({
         <Expandable
           title="Add INS Record"
           name="insRecord"
-          element={<InsForm />}
+          element={
+            <InsForm
+              transactionIndex={transactionIndex}
+              recordIndex={getRecordIndex("ins")}
+            />
+          }
         />
       )}
     </Box>

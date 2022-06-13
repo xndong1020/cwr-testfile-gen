@@ -25,7 +25,12 @@ export const initIndForm = {
   "numbers-of-players": "",
 };
 
-const IndForm = () => {
+interface IndFormProps {
+  transactionIndex: number;
+  recordIndex: number;
+}
+
+const IndForm = ({ transactionIndex, recordIndex }: IndFormProps) => {
   const [indForm, setForm] = useState<IIndForm>(initIndForm);
   const { handleUpdateRecord } = useContext(CreateFormContext);
 
@@ -45,7 +50,9 @@ const IndForm = () => {
     const newIndForm = {
       ...initIndForm,
       "record-prefix":
-        "IND" + numericOnlyGen(IndFormConfig["record-prefix"].length - 3),
+        "IND" +
+        transactionIndex.toString().padStart(8, "0") +
+        recordIndex.toString().padStart(8, "0"),
       "instrument-code": instrumentsKenGen(),
       "numbers-of-players": numericOnlyGen(
         IndFormConfig["numbers-of-players"].length

@@ -27,7 +27,13 @@ export const initInsForm = {
   "instrumentation-description": "",
 };
 
-const InsForm = () => {
+interface InsFormProps {
+  transactionIndex: number;
+  recordIndex: number;
+}
+
+
+const InsForm = ({ transactionIndex, recordIndex }: InsFormProps) => {
   const [insForm, setForm] = useState<IInsForm>(initInsForm);
   const { handleUpdateRecord } = useContext(CreateFormContext);
 
@@ -47,7 +53,9 @@ const InsForm = () => {
     const newInsForm = {
       ...initInsForm,
       "record-prefix":
-        "INS" + numericOnlyGen(InsFormConfig["record-prefix"].length - 3),
+        "INS" +
+        transactionIndex.toString().padStart(8, "0") +
+        recordIndex.toString().padStart(8, "0"),
       "number-of-voices": numericOnlyGen(
         InsFormConfig["number-of-voices"].length
       ),
