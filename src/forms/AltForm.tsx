@@ -14,6 +14,7 @@ import {
   titleTypesKenGen,
 } from "../utils/referenceTableKeyGenerator";
 import IFormBase from "./IFormBase";
+import TrlForm from "./TrlForm";
 
 export interface IAltForm extends IFormBase {
   "record-prefix": string;
@@ -46,7 +47,7 @@ const IndForm = () => {
     },
     []
   );
-  const handleGenerateInd = () => {
+  const handleGenerateAlt = () => {
     const newAltForm = {
       ...initAltForm,
       "record-prefix":
@@ -128,11 +129,12 @@ const IndForm = () => {
       </FormControl>
 
       <br />
+      <TrlForm />
       <br />
       <Button
         variant="contained"
         color="success"
-        onClick={() => handleGenerateInd()}
+        onClick={() => handleGenerateAlt()}
         sx={{
           paddingRight: 20,
         }}
