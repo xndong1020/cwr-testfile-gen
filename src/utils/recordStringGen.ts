@@ -1,6 +1,10 @@
 import IFormBase from "../forms/IFormBase";
 
-export const recordStringGen = (form: IFormBase, noLineBreak = false) => {
+export const recordStringGen = (
+  form: IFormBase,
+  newLineChar: string,
+  noLineBreak = false
+) => {
   if (!form) return "";
   const formString = Object.entries(form)
     .filter(([key, _]) => key !== "type") // do not print type property
@@ -9,6 +13,6 @@ export const recordStringGen = (form: IFormBase, noLineBreak = false) => {
       return accu;
     }, "");
 
-  const lineBreak = noLineBreak ? "" : "\n";
+  const lineBreak = noLineBreak ? "" : newLineChar;
   return !!formString.length ? `${formString}${lineBreak}` : "";
 };

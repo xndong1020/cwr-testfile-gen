@@ -1,4 +1,4 @@
-import { Button, Paper, Box, Grid } from "@mui/material";
+import { Button, Paper, Box, Grid, Dialog, DialogTitle } from "@mui/material";
 import { CreateFormContext } from "./contexts/FormContext";
 import React, { useContext, useState, useEffect } from "react";
 import HdrForm from "./forms/HdrForm";
@@ -8,35 +8,45 @@ import { recordStringGen } from "./utils/recordStringGen";
 import { Expandable } from "./components/Expandable";
 import GroupContainer from "./components/GroupContainer";
 import TrlForm from "./forms/TrlForm";
+import { Html } from "@mui/icons-material";
 
 function App() {
+  const [open, setOpen] = useState(false);
   const { hdr, groups, trl } = useContext(CreateFormContext);
 
-  console.log("groups", groups);
+  const genData = (newLineChar: string): string => {
+    let dataToProcess = recordStringGen(hdr, newLineChar);
+
+    for (const { grh, grt, transactions } of groups) {
+      dataToProcess += recordStringGen(grh, newLineChar);
+
+      for (const { alt, nwr, ind, ins } of transactions) {
+        dataToProcess += !!nwr ? recordStringGen(nwr, newLineChar) : "";
+        dataToProcess += !!alt ? recordStringGen(alt, newLineChar) : "";
+        dataToProcess += !!ind ? recordStringGen(ind, newLineChar) : "";
+        dataToProcess += !!ins ? recordStringGen(ins, newLineChar) : "";
+      }
+
+      dataToProcess += recordStringGen(grt, newLineChar);
+    }
+
+    dataToProcess += recordStringGen(trl, newLineChar);
+    return dataToProcess;
+  };
+
+  const handleToggleDialog = () => {
+    setOpen((prev) => {
+      return !prev;
+    });
+  };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let dataToProcess = recordStringGen(hdr);
-
-    for (const { grh, grt, transactions } of groups) {
-      dataToProcess += recordStringGen(grh);
-
-      for (const { alt, nwr, ind, ins } of transactions) {
-        dataToProcess += !!nwr ? recordStringGen(nwr) : "";
-        dataToProcess += !!alt ? recordStringGen(alt) : "";
-        dataToProcess += !!ind ? recordStringGen(ind) : "";
-        dataToProcess += !!ins ? recordStringGen(ins) : "";
-      }
-
-      dataToProcess += recordStringGen(grt);
-    }
-
-    dataToProcess += recordStringGen(trl);
 
     var element = document.createElement("a");
     element.setAttribute(
       "href",
-      "data:text/plain;charset=utf-8," + dataToProcess
+      "data:text/plain;charset=utf-8," + genData("\n")
     );
     element.setAttribute("download", "test.V21");
 
@@ -48,8 +58,21 @@ function App() {
     document.body.removeChild(element);
   };
 
+  const handlePreview = () => {
+    handleToggleDialog();
+  };
+
   return (
     <>
+      <Dialog
+        onClose={handleToggleDialog}
+        open={open}
+        fullScreen
+        sx={{ width: "90%" }}
+      >
+        <DialogTitle>Preview File</DialogTitle>
+        <div dangerouslySetInnerHTML={{ __html: genData("<br />") }} />
+      </Dialog>
       <Grid container spacing={2}>
         <Grid item xs={9}>
           <DndContainer allowedDropEffect="copy" />
@@ -79,7 +102,17 @@ function App() {
                 <br />
                 <br />
 
-                <Button type="submit" variant="contained" color="primary">
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="warning"
+                  onClick={handlePreview}
+                  sx={{ marginRight: "10px" }}
+                >
+                  Preview
+                </Button>
+
+                <Button type="submit" variant="contained" color="success">
                   save
                 </Button>
               </form>
