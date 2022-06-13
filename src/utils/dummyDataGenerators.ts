@@ -19,7 +19,7 @@ export const dateGen = (isPastDate: boolean = true): string => {
   return result;
 };
 
-export const whitespaceOnlygGen = (len: number): string => {
+export const whitespaceOnlyGen = (len: number): string => {
   return "".padEnd(len, " ");
 };
 

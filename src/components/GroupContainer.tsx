@@ -35,7 +35,7 @@ const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
         <Expandable
           title="Add NWR Record"
           name="nwrRecord"
-          element={<NwrForm type={"NWR"} transactionSeq={0} recordSeq={1} />}
+          element={<NwrForm transactionSeq={0} recordSeq={1} />}
         />
       )}
 

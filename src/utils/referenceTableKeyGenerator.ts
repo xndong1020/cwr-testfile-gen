@@ -69,7 +69,7 @@ export const titleTypesKenGen = (): string => {
   return tableKeyGen(titleType);
 };
 
-export const tansactionTypesKenGen = (): string => {
+export const transactionTypesKenGen = (): string => {
   return tableKeyGen(transactionType);
 };
 

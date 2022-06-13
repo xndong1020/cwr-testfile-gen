@@ -6,10 +6,6 @@ import {
   FormHelperText,
   Typography,
   Button,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  FormLabel,
 } from "@mui/material";
 import {
   dateGen,
@@ -17,7 +13,7 @@ import {
   numericOnlyGen,
   personNameGen,
   wordsGen,
-  whitespaceOnlygGen,
+  whitespaceOnlyGen,
 } from "../utils/dummyDataGenerators";
 import {
   booleanValueGen,
@@ -99,12 +95,11 @@ export const initNwrForm = {
 };
 
 interface NwrFormProps {
-  type: "NWR" | "REV";
   transactionSeq: number;
   recordSeq: number;
 }
 
-const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
+const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
   const [nwrForm, setForm] = useState<INwrForm>(initNwrForm);
   const { handleUpdateRecord } = useContext(CreateFormContext);
 
@@ -121,39 +116,28 @@ const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
     []
   );
 
-  // const handleRadioButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log(" e.target.value", e.target.value);
-  //   setForm((prev) => {
-  //     return {
-  //       ...prev,
-  //       "record-type": e.target.value,
-  //     };
-  //   });
-  // };
-
   const handleGenerateNrw = (requiredFieldsOnly: boolean = false) => {
     const dummyNrw: INwrForm = {
       ...nwrForm,
-      "record-type": `${type}`,
       "transaction-sequence-number": ("" + transactionSeq).padStart(8, "0"),
       "record-sequence-number": ("" + recordSeq).padStart(8, "0"),
       "work-title": wordsGen().toUpperCase(),
       "language-code": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["language-code"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["language-code"].length)
         : languageKeyGen(),
       "submitter-work": numericOnlyGen(),
       iswc: requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["iswc"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["iswc"].length)
         : numericOnlyGen(NwrFieldsLength["iswc"].length),
       "copyright-date": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["copyright-date"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["copyright-date"].length)
         : dateGen(),
       "copyright-number": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["copyright-number"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["copyright-number"].length)
         : numericOnlyGen(NwrFieldsLength["copyright-number"].length),
       "musical-work-distribution": musicalWorkDistributionCategoryKeyGen(),
       "category-duration": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["category-duration"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["category-duration"].length)
         : durationgGen({
             hours: { min: 0, max: 9 },
             minutes: { min: 0, max: 60 },
@@ -161,56 +145,54 @@ const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
           }),
       "recorded-indicator": "U",
       "text-music-relationship": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["text-music-relationship"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["text-music-relationship"].length)
         : textMusicRelationshipKeyGen(),
       "relationship-composite-type": requiredFieldsOnly
-        ? whitespaceOnlygGen(
+        ? whitespaceOnlyGen(
             NwrFieldsLength["relationship-composite-type"].length
           )
         : compositeTypeKeyGen(),
       "version-type": versionTypeKeyGen(),
       "excerpt-type": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["excerpt-type"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["excerpt-type"].length)
         : excerptTypeKenGen(),
       "music-arrangement": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["music-arrangement"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["music-arrangement"].length)
         : musicArrangementKenGen(),
       "lyric-adaptation": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["lyric-adaptation"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["lyric-adaptation"].length)
         : lyricAdaptationKenGen(),
       "contact-name": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["contact-name"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["contact-name"].length)
         : personNameGen({ firstName: true, lastName: true }).toUpperCase(),
       "contact-id": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["contact-id"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["contact-id"].length)
         : numericOnlyGen(NwrFieldsLength["contact-id"].length),
       "cwr-work-type": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["cwr-work-type"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["cwr-work-type"].length)
         : cwrWorkTypeKenGen(),
       "grand-rights-ind": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["grand-rights-ind"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["grand-rights-ind"].length)
         : booleanValueGen(),
       "composite-component-count": requiredFieldsOnly
-        ? whitespaceOnlygGen(
-            NwrFieldsLength["composite-component-count"].length
-          )
+        ? whitespaceOnlyGen(NwrFieldsLength["composite-component-count"].length)
         : numericOnlyGen(NwrFieldsLength["composite-component-count"].length),
       "date-of-publication-of-printed-edition": requiredFieldsOnly
-        ? whitespaceOnlygGen(
+        ? whitespaceOnlyGen(
             NwrFieldsLength["date-of-publication-of-printed-edition"].length
           )
         : dateGen(),
       "exceptional-clause": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["exceptional-clause"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["exceptional-clause"].length)
         : booleanValueGen(),
       "opus-number": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["opus-number"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["opus-number"].length)
         : numericOnlyGen(NwrFieldsLength["opus-number"].length),
       "catalogue-number": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["catalogue-number"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["catalogue-number"].length)
         : numericOnlyGen(NwrFieldsLength["catalogue-number"].length),
       "priority-flag": requiredFieldsOnly
-        ? whitespaceOnlygGen(NwrFieldsLength["priority-flag"].length)
+        ? whitespaceOnlyGen(NwrFieldsLength["priority-flag"].length)
         : booleanValueGen(),
     };
     setForm(dummyNrw);
@@ -219,20 +201,6 @@ const NwrForm = ({ type, transactionSeq, recordSeq }: NwrFormProps) => {
 
   return (
     <>
-      {/* <FormControl>
-        <FormLabel id="record-type-label">Record Type</FormLabel>
-        <RadioGroup
-          row
-          aria-labelledby="record-type-label"
-          value={nwrForm["record-type"]}
-          name="radio-buttons-group"
-          onChange={handleRadioButtonChange}
-        >
-          <FormControlLabel value="NWR" control={<Radio />} label="NWR" />
-          <FormControlLabel value="REV" control={<Radio />} label="REV" />
-        </RadioGroup>
-      </FormControl>
-      <br /> */}
       <FormControl>
         <InputLabel htmlFor="work-title">Work Title</InputLabel>
         <Input

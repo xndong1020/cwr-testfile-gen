@@ -12,7 +12,7 @@ import {
   dateGen,
   durationgGen,
   numericOnlyGen,
-  whitespaceOnlygGen,
+  whitespaceOnlyGen,
   wordsGen,
 } from "../utils/dummyDataGenerators";
 import { itemGenFromArray } from "../utils/referenceTableKeyGenerator";
@@ -74,9 +74,7 @@ const HdrForm = () => {
         seconds: { min: 0, max: 60 },
       }),
       "transmission-date": dateGen(),
-      "character-set": whitespaceOnlygGen(
-        HdrFormConfig["character-set"].length
-      ),
+      "character-set": whitespaceOnlyGen(HdrFormConfig["character-set"].length),
     };
     setHdrForm(hdr);
     handleUpdateRecord(hdr);

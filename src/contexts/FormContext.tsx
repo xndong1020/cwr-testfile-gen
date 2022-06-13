@@ -214,6 +214,7 @@ export const CreateFormContextProvider = memo(
       }
     };
     const handleUpdateRecord = (record: IFormBase) => {
+      console.log('record update', record);
       switch (record.type) {
         case "HDR":
           setState((prevState: IFormContext) => ({
