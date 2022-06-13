@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import {
   dateGen,
-  durationgGen,
+  durationGen,
   numericOnlyGen,
   personNameGen,
   wordsGen,
@@ -138,7 +138,7 @@ const NwrForm = ({ transactionSeq, recordSeq }: NwrFormProps) => {
       "musical-work-distribution": musicalWorkDistributionCategoryKeyGen(),
       "category-duration": requiredFieldsOnly
         ? whitespaceOnlyGen(NwrFieldsLength["category-duration"].length)
-        : durationgGen({
+        : durationGen({
             hours: { min: 0, max: 9 },
             minutes: { min: 0, max: 60 },
             seconds: { min: 0, max: 60 },

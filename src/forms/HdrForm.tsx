@@ -10,7 +10,7 @@ import { HdrFormConfig } from "../configurations/HdrFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
 import {
   dateGen,
-  durationgGen,
+  durationGen,
   numericOnlyGen,
   whitespaceOnlyGen,
   wordsGen,
@@ -68,7 +68,7 @@ const HdrForm = () => {
       "sender-name": wordsGen(45).toUpperCase(),
       "edi-standard-version-number": "01.10",
       "creation-date": dateGen(),
-      "creation-time": durationgGen({
+      "creation-time": durationGen({
         hours: { min: 0, max: 9 },
         minutes: { min: 0, max: 60 },
         seconds: { min: 0, max: 60 },

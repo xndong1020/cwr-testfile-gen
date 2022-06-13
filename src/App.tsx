@@ -7,9 +7,10 @@ import DndTag from "./components/DndTag";
 import { recordStringGen } from "./utils/recordStringGen";
 import { Expandable } from "./components/Expandable";
 import GroupContainer from "./components/GroupContainer";
+import TrlForm from "./forms/TrlForm";
 
 function App() {
-  const { hdr, groups } = useContext(CreateFormContext);
+  const { hdr, groups, trl } = useContext(CreateFormContext);
 
   console.log("groups", groups);
 
@@ -25,6 +26,8 @@ function App() {
       dataToProcess += !!ins ? recordStringGen(ins) : "";
       dataToProcess += recordStringGen(grt);
     }
+
+    dataToProcess += recordStringGen(trl);
 
     var element = document.createElement("a");
     element.setAttribute(
@@ -83,6 +86,13 @@ function App() {
                   />
                 );
               })}
+
+              <br />
+              <br />
+
+              <TrlForm />
+              <br />
+              <br />
 
               <Button type="submit" variant="contained" color="primary">
                 save

@@ -129,7 +129,6 @@ const IndForm = () => {
       </FormControl>
 
       <br />
-      <TrlForm />
       <br />
       <Button
         variant="contained"

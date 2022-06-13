@@ -23,7 +23,11 @@ export const whitespaceOnlyGen = (len: number): string => {
   return "".padEnd(len, " ");
 };
 
-export const durationgGen = (config: {
+export const padLeftGen = (target: string, totalLength: number): string => {
+  return target.padStart(totalLength - target.length, "0");
+};
+
+export const durationGen = (config: {
   hours: {
     min: number;
     max: number;

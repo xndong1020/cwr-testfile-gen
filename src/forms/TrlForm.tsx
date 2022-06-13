@@ -9,7 +9,11 @@ import {
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { TrlFormConfig } from "../configurations/TrlFormConfig";
 import { CreateFormContext } from "../contexts/FormContext";
-import { numericOnlyGen, wordsGen } from "../utils/dummyDataGenerators";
+import {
+  numericOnlyGen,
+  padLeftGen,
+  wordsGen,
+} from "../utils/dummyDataGenerators";
 import {
   languageKeyGen,
   titleTypesKenGen,
@@ -33,26 +37,53 @@ export const initTrlForm: ITrlForm = {
 };
 
 const TrlForm = () => {
-  const { groups, handleUpdateRecord } = useContext(CreateFormContext);
+  const {
+    groups,
+    handleUpdateRecord,
+    trl = { ...initTrlForm },
+  } = useContext(CreateFormContext);
+  console.log("TrlForm", trl);
 
   useEffect(() => {
     const updateState = () => {
-      const records = groups.flat(1).flat(1);
-      console.log("records", records);
+      const records = groups;
+      const numberOfTransactions = groups.reduce((acc, group) => {
+        Object.keys(group).forEach((key) => {
+          if (Object.keys(transactionType).includes(key.toUpperCase())) {
+            acc += 1;
+          }
+        });
+        return acc;
+      }, 0);
+      const numberOfRecords = groups.reduce((acc, group) => {
+        Object.keys(group).forEach((key) => {
+          acc += 1;
+        });
+        return acc;
+      }, 0);
       const newGrtForm = {
         ...initTrlForm,
-        "group-count": groups.length,
-        "transaction-count": 1,
-        "record-count": groups.flat(1).length,
+        "group-count": padLeftGen(
+          groups.length.toString(),
+          TrlFormConfig["group-count"].length
+        ),
+        "transaction-count": padLeftGen(
+          numberOfTransactions.toString(),
+          TrlFormConfig["group-count"].length
+        ),
+        "record-count": padLeftGen(
+          numberOfRecords.toString(),
+          TrlFormConfig["group-count"].length
+        ),
       };
       handleUpdateRecord(newGrtForm);
     };
     updateState();
   }, [groups, handleUpdateRecord]);
   return (
-    <Paper elevation={3}>{`Transmission Trailer: Total Groups ${
-      groups.length
-    }, Total Transactions: ${1}, Total Records: ${1} `}</Paper>
+    <Paper
+      elevation={3}
+    >{`Transmission Trailer: Total Groups ${trl["group-count"]}, Total Transactions: ${trl["transaction-count"]}, Total Records: ${trl["record-count"]} `}</Paper>
   );
 };
 

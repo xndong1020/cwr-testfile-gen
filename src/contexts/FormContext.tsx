@@ -8,6 +8,7 @@ import IFormBase from "../forms/IFormBase";
 import { IIndForm } from "../forms/IndForm";
 import { IInsForm } from "../forms/InsForm";
 import { INwrForm } from "../forms/NwrForm";
+import { ITrlForm } from "../forms/TrlForm";
 
 export interface IGroup {
   grh: IGrhForm;
@@ -20,6 +21,7 @@ export interface IGroup {
 
 export interface IFormContext {
   hdr: IHdrForm;
+  trl: ITrlForm;
   groups: IGroup[];
   activeGroupIndex: number;
   handleSetRecordActive: (name: string) => void;
@@ -124,6 +126,13 @@ export const initFormContextValues: IFormContext = {
       grt: initGrtForm,
     },
   ],
+  trl: {
+    type: "TRL",
+    "record-type": "TRL",
+    "group-count": "1",
+    "transaction-count": "",
+    "record-count": "",
+  },
   activeGroupIndex: 0,
   handleSetRecordActive: (name: string) => {},
   handleUpdateRecord: (record: IFormBase) => {},
@@ -214,12 +223,19 @@ export const CreateFormContextProvider = memo(
       }
     };
     const handleUpdateRecord = (record: IFormBase) => {
-      console.log('record update', record);
+      console.log("record update", record);
       switch (record.type) {
         case "HDR":
           setState((prevState: IFormContext) => ({
             ...prevState,
             hdr: record as IHdrForm,
+          }));
+          break;
+
+        case "TRL":
+          setState((prevState: IFormContext) => ({
+            ...prevState,
+            trl: record as ITrlForm,
           }));
           break;
 
