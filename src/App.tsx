@@ -18,12 +18,16 @@ function App() {
     e.preventDefault();
     let dataToProcess = recordStringGen(hdr);
 
-    for (const { grh, grt, alt, nwr, ind, ins } of groups) {
+    for (const { grh, grt, transactions } of groups) {
       dataToProcess += recordStringGen(grh);
-      dataToProcess += !!nwr ? recordStringGen(nwr) : "";
-      dataToProcess += !!alt ? recordStringGen(alt) : "";
-      dataToProcess += !!ind ? recordStringGen(ind) : "";
-      dataToProcess += !!ins ? recordStringGen(ins) : "";
+
+      for (const { alt, nwr, ind, ins } of transactions) {
+        dataToProcess += !!nwr ? recordStringGen(nwr) : "";
+        dataToProcess += !!alt ? recordStringGen(alt) : "";
+        dataToProcess += !!ind ? recordStringGen(ind) : "";
+        dataToProcess += !!ins ? recordStringGen(ins) : "";
+      }
+
       dataToProcess += recordStringGen(grt);
     }
 
@@ -44,66 +48,48 @@ function App() {
     document.body.removeChild(element);
   };
 
-  // const groupBuilder = (groupNumber: number): JSX.Element[] => {
-  //   console.log("groupBuilder", groupNumber);
-  //   const groupElems = [] as JSX.Element[];
-  //   if (!groupNumber) return groupElems;
-
-  //   for (let index = 0; index < groupNumber; index++) {
-  //     groupElems.push(
-  //       <GroupContainer
-  //         groupIndex={index}
-  //         activeGroupsCount={activeGroupsCount}
-  //         activeAltCount={activeAltCount}
-  //         activeNwrCount={activeNwrCount}
-  //         activeIndCount={activeIndCount}
-  //         key={index}
-  //       />
-  //     );
-  //   }
-  //   console.log("groupElems", groupElems);
-  //   return groupElems;
-  // };
-
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={9}>
+          <DndContainer allowedDropEffect="copy" />
           <Paper>
-            <DndContainer allowedDropEffect="copy" />
-            <form onSubmit={submitHandler}>
-              <Expandable
-                title="Add Transmission Header"
-                name="fileHeader"
-                element={<HdrForm />}
-              />
-              {groups.map((group, index) => {
-                return (
-                  <GroupContainer
-                    groupIndex={index}
-                    totalGroups={groups.length}
-                    key={index}
-                  />
-                );
-              })}
+            <Box>
+              <form onSubmit={submitHandler}>
+                <Expandable
+                  title="Add Transmission Header"
+                  name="fileHeader"
+                  element={<HdrForm />}
+                />
+                {groups.map((group, index) => {
+                  return (
+                    <GroupContainer
+                      groupIndex={index}
+                      totalGroups={groups.length}
+                      key={index}
+                    />
+                  );
+                })}
 
-              <br />
-              <br />
+                <br />
+                <br />
 
-              <TrlForm />
-              <br />
-              <br />
+                <TrlForm />
+                <br />
+                <br />
 
-              <Button type="submit" variant="contained" color="primary">
-                save
-              </Button>
-            </form>
+                <Button type="submit" variant="contained" color="primary">
+                  save
+                </Button>
+              </form>
+            </Box>
           </Paper>
         </Grid>
         <Grid item xs={3}>
           <Paper>
             <Box sx={{ border: "1px dashed #888", height: 400 }}>
               <DndTag name="NEW GROUP" />
+              <DndTag name="NEW TRANSACTION" />
               <DndTag name="ALT" />
               <DndTag name="HDR" />
               <DndTag name="INS" />

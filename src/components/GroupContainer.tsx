@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import { CreateFormContext } from "../contexts/FormContext";
 
-import NwrForm from "../forms/NwrForm";
 import GrtForm from "../forms/GrtForm";
 import GrhForm from "../forms/GrhForm";
-import IndForm from "../forms/IndForm";
-import AltForm from "../forms/AltForm";
-import { Expandable } from "../components/Expandable";
-import InsForm from "../forms/InsForm";
+
+import { Box } from "@mui/material";
+import TransactionContainer from "./TransactionContainer";
 
 interface IGroupContainerProps {
   groupIndex: number;
@@ -17,7 +15,7 @@ interface IGroupContainerProps {
 const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
   const { groups } = useContext(CreateFormContext);
 
-  const { nwr, alt, ind, ins } = groups[groupIndex];
+  const { transactions } = groups[groupIndex];
 
   const recordCount = Object.entries(groups[groupIndex])
     .filter(([key, val]) => !!val && !["grh", "grt"].includes(key))
@@ -27,41 +25,22 @@ const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
     }, 0);
 
   return (
-    <>
+    <Box>
       {!!totalGroups && (
         <GrhForm groupId={groupIndex} batchRequest={totalGroups} />
       )}
-      {!!nwr && (
-        <Expandable
-          title="Add NWR Record"
-          name="nwrRecord"
-          element={<NwrForm transactionSeq={0} recordSeq={1} />}
-        />
-      )}
 
-      {!!alt && (
-        <Expandable
-          title="Add ALT Record"
-          name="altRecord"
-          element={<AltForm />}
-        />
-      )}
-
-      {!!ind && (
-        <Expandable
-          title="Add IND Record"
-          name="indRecord"
-          element={<IndForm />}
-        />
-      )}
-
-      {!!ins && (
-        <Expandable
-          title="Add INS Record"
-          name="insRecord"
-          element={<InsForm />}
-        />
-      )}
+      {transactions &&
+        transactions.length &&
+        transactions.map((transaction, idx) => {
+          return (
+            <TransactionContainer
+              groupIndex={groupIndex}
+              transactionIndex={idx}
+              key={idx}
+            />
+          );
+        })}
 
       {!!totalGroups && (
         <GrtForm
@@ -70,7 +49,7 @@ const GroupContainer = ({ groupIndex, totalGroups }: IGroupContainerProps) => {
           recordCount={recordCount}
         />
       )}
-    </>
+    </Box>
   );
 };
 

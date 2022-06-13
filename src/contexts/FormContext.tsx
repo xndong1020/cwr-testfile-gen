@@ -10,12 +10,17 @@ import { IInsForm } from "../forms/InsForm";
 import { INwrForm } from "../forms/NwrForm";
 import { ITrlForm } from "../forms/TrlForm";
 
-export interface IGroup {
-  grh: IGrhForm;
+export interface ITransaction {
   nwr?: INwrForm;
   ind?: IIndForm;
   ins?: IInsForm;
   alt?: IAltForm;
+}
+
+export interface IGroup {
+  grh: IGrhForm;
+  transactions: ITransaction[];
+  activeTransactionIndex: number;
   grt: IGrtForm;
 }
 
@@ -119,10 +124,15 @@ export const initFormContextValues: IFormContext = {
   groups: [
     {
       grh: initGrhForm,
-      nwr: initNwrForm,
-      ind: initIndForm,
-      ins: initInsForm,
-      alt: initAltForm,
+      transactions: [
+        {
+          nwr: initNwrForm,
+          ind: initIndForm,
+          ins: initInsForm,
+          alt: initAltForm,
+        },
+      ],
+      activeTransactionIndex: 0,
       grt: initGrtForm,
     },
   ],
@@ -153,14 +163,23 @@ export const CreateFormContextProvider = memo(
             activeGroupIndex: prevState.groups.length + 1,
             groups: [
               ...prevState.groups,
-              { grh: initGrhForm, grt: initGrtForm },
+              {
+                grh: initGrhForm,
+                grt: initGrtForm,
+                transactions: [],
+                activeTransactionIndex: 0,
+              },
             ],
           }));
           break;
 
-        case "NWR":
+        case "NEW TRANSACTION":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+            const newCurrentGroup = {
+              ...currentGroup,
+              transaction: currentGroup.transactions.push({}),
+            };
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -168,7 +187,40 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [...otherGroups, { ...currentGroup, nwr: initNwrForm }],
+              groups: [...otherGroups, newCurrentGroup],
+            };
+          });
+          break;
+
+        case "NWR":
+          setState((prevState: IFormContext) => {
+            const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, nwr: initNwrForm },
+              ],
+            };
+
+            const otherGroups = slice(
+              prevState.groups,
+              0,
+              prevState.groups.length - 1
+            );
+            return {
+              ...prevState,
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
@@ -176,6 +228,24 @@ export const CreateFormContextProvider = memo(
         case "IND":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, ind: initIndForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -183,7 +253,7 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [...otherGroups, { ...currentGroup, ind: initIndForm }],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
@@ -191,6 +261,24 @@ export const CreateFormContextProvider = memo(
         case "INS":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, ins: initInsForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -198,7 +286,7 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [...otherGroups, { ...currentGroup, ins: initInsForm }],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
@@ -206,6 +294,24 @@ export const CreateFormContextProvider = memo(
         case "ALT":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, alt: initAltForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -213,7 +319,7 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [...otherGroups, { ...currentGroup, alt: initAltForm }],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
@@ -278,6 +384,24 @@ export const CreateFormContextProvider = memo(
         case "NWR":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, nwr: record as INwrForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -285,16 +409,31 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [
-                ...otherGroups,
-                { ...currentGroup, nwr: record as INwrForm },
-              ],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
         case "IND":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, ind: record as IIndForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -302,16 +441,31 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [
-                ...otherGroups,
-                { ...currentGroup, ind: record as IIndForm },
-              ],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
         case "INS":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, ins: record as IInsForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -319,16 +473,31 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [
-                ...otherGroups,
-                { ...currentGroup, ins: record as IInsForm },
-              ],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
         case "ALT":
           setState((prevState: IFormContext) => {
             const currentGroup = prevState.groups[prevState.groups.length - 1];
+
+            const currentTransaction =
+              currentGroup.transactions[currentGroup.transactions.length - 1];
+
+            const otherTransactions = slice(
+              currentGroup.transactions,
+              0,
+              currentGroup.transactions.length - 1
+            );
+
+            const newCurrentGroup = {
+              ...currentGroup,
+              transactions: [
+                ...otherTransactions,
+                { ...currentTransaction, alt: record as IAltForm },
+              ],
+            };
+
             const otherGroups = slice(
               prevState.groups,
               0,
@@ -336,10 +505,7 @@ export const CreateFormContextProvider = memo(
             );
             return {
               ...prevState,
-              groups: [
-                ...otherGroups,
-                { ...currentGroup, alt: record as IAltForm },
-              ],
+              groups: [...otherGroups, { ...newCurrentGroup }],
             };
           });
           break;
@@ -350,8 +516,16 @@ export const CreateFormContextProvider = memo(
     };
     const [state, setState] = useState({
       hdr: {},
-      groups: [{}],
+      groups: [
+        {
+          grh: initGrhForm,
+          transactions: [{}],
+          activeTransactionIndex: 0,
+          grt: initGrtForm,
+        },
+      ],
       activeGroupIndex: 0,
+      trl: {},
       handleSetRecordActive,
       handleUpdateRecord,
     } as IFormContext);
